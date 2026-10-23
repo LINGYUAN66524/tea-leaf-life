@@ -1,0 +1,2811 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>一片叶子的一生 · 中国茶文化互动长卷</title>
+<style>
+/* ============ 基础 ============ */
+:root{
+  --paper:#F5F0E6;
+  --paper-2:#EFE7D6;
+  --ink:#2B2B2B;
+  --ink-2:#5C554B;
+  --ink-3:#8A8175;
+  --tea:#6B4A2F;
+  --tea-2:#8E6A48;
+  --celadon:#7BA39B;
+  --celadon-2:#C8D8D2;
+  --cinnabar:#B03A2E;
+  --line:rgba(43,43,43,.14);
+  --line-2:rgba(43,43,43,.08);
+  --serif:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSun",serif;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--serif);font-size:16px;line-height:1.85;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:radial-gradient(rgba(107,74,47,.05) .6px,transparent .6px);
+  background-size:7px 7px;opacity:.5;
+}
+img,svg,canvas{display:block;max-width:100%}
+[hidden]{display:none!important}
+button{font-family:inherit;font-size:inherit;color:inherit;cursor:pointer;background:none;border:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--cinnabar);outline-offset:3px}
+::selection{background:var(--celadon-2)}
+
+/* ============ 顶栏 ============ */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:50;height:58px;
+  display:flex;align-items:center;gap:18px;padding:0 clamp(14px,4vw,40px);
+  background:rgba(245,240,230,.86);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line-2);
+}
+.brand{display:flex;align-items:center;gap:9px;font-size:15px;letter-spacing:.14em;white-space:nowrap}
+.brand b{font-weight:600}
+.brand small{font-size:11px;color:var(--ink-3);letter-spacing:.08em}
+.brand svg{width:19px;height:19px;color:var(--tea)}
+.topnav{display:flex;gap:2px;margin-left:8px;overflow-x:auto;scrollbar-width:none}
+.topnav::-webkit-scrollbar{display:none}
+.topnav a{
+  padding:6px 10px;font-size:14px;text-decoration:none;color:var(--ink-2);
+  letter-spacing:.1em;white-space:nowrap;border-radius:2px;transition:color .2s,background .2s;
+}
+.topnav a:hover{color:var(--ink);background:rgba(107,74,47,.06)}
+.topnav a.on{color:var(--cinnabar)}
+.topnav a.on::after{content:"";display:block;height:1px;margin-top:2px;background:var(--cinnabar)}
+.tools{margin-left:auto;display:flex;align-items:center;gap:6px}
+.tool-btn{
+  display:inline-flex;align-items:center;gap:6px;padding:7px 11px;font-size:13px;
+  border:1px solid var(--line);border-radius:2px;color:var(--ink-2);
+  letter-spacing:.06em;transition:.2s var(--ease);
+}
+.tool-btn:hover{border-color:var(--tea);color:var(--tea)}
+.tool-btn .dot{width:5px;height:5px;border-radius:50%;background:var(--celadon)}
+.tool-btn.off .dot{background:var(--ink-3);opacity:.4}
+.scroll-line{position:fixed;top:57px;left:0;height:1px;background:var(--tea);z-index:51;width:0;transition:width .1s linear}
+
+/* ============ 首屏 ============ */
+.hero{
+  position:relative;min-height:100svh;display:grid;place-items:center;
+  padding:120px 24px 90px;overflow:hidden;text-align:center;isolation:isolate;
+}
+.hero-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
+.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center 58%;filter:contrast(.97) brightness(1.02);transform:scale(1.03)}
+.hero::before{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(245,240,230,.14) 0%,rgba(245,240,230,.26) 50%,rgba(245,240,230,.78) 84%,#F5F0E6 100%);
+}
+#heroCanvas{display:none}
+.hero-inner{
+  position:relative;z-index:2;width:min(740px,100%);max-width:820px;
+  padding:clamp(24px,4.4vw,50px) clamp(20px,4.8vw,54px);
+  background:linear-gradient(135deg,rgba(255,255,255,.34),rgba(245,240,230,.10) 45%,rgba(250,246,238,.20));
+  -webkit-backdrop-filter:blur(30px) saturate(1.15) brightness(1.04);
+  backdrop-filter:blur(30px) saturate(1.15) brightness(1.04);
+  border:1px solid rgba(255,255,255,.55);
+  box-shadow:0 32px 90px rgba(43,43,43,.16),inset 0 1px 0 rgba(255,255,255,.8);
+}
+.hero-inner > *{position:relative;z-index:1}
+.hero-inner::after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:linear-gradient(120deg,rgba(255,255,255,.26),rgba(255,255,255,0) 38%);
+}
+.hero-kicker{font-size:12px;letter-spacing:.42em;color:var(--ink-2);margin:0 0 26px}
+.hero-title{margin:0;font-weight:400;font-size:clamp(44px,10vw,92px);line-height:1.12;letter-spacing:.1em}
+.hero-title span{display:block}
+.hero-title span:nth-child(2){color:var(--tea);margin-left:.9em}
+.hero-sub{margin:30px auto 0;max-width:32em;font-size:15px;color:var(--ink);line-height:2}
+.br-sm{display:none}
+@media (max-width:520px){.br-sm{display:inline}}
+.hero-actions .btn.ghost{border-color:rgba(43,43,43,.5);background:rgba(245,240,230,.38);color:var(--ink)}
+.hero-actions{display:flex;gap:12px;justify-content:center;margin-top:38px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:44px;padding:10px 24px;border:1px solid var(--ink);border-radius:2px;
+  font-size:14px;letter-spacing:.14em;text-decoration:none;transition:.25s var(--ease);
+}
+.btn:hover{background:var(--ink);color:var(--paper)}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.btn.primary:hover{background:var(--tea);border-color:var(--tea)}
+.btn.ghost{border-color:var(--line);color:var(--ink-2)}
+.btn.ghost:hover{border-color:var(--ink);color:var(--ink);background:none}
+.hero-scroll{
+  position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:2;
+  font-size:11px;letter-spacing:.18em;color:var(--ink-2);
+  padding:7px 14px;background:rgba(245,240,230,.78);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.55);white-space:nowrap;
+}
+.hero-scroll::after{display:none}
+@keyframes drop{0%{transform:scaleY(.2);opacity:0}40%{opacity:1}100%{transform:scaleY(1);opacity:0}}
+
+/* ============ 图片板块 ============ */
+.plate-band{max-width:1280px;margin:0 auto;padding:clamp(18px,4vw,40px) clamp(16px,4vw,32px) 0}
+.plate-band figure{margin:0;background:#FBF8F0;border:1px solid var(--line);padding:10px 10px 0;box-shadow:0 16px 40px rgba(43,43,43,.05)}
+.plate-band img{width:100%;height:clamp(190px,26vw,350px);object-fit:cover;object-position:40% 50%;display:block;filter:saturate(.92) contrast(.98)}
+.plate-band figcaption{display:flex;justify-content:space-between;gap:10px 18px;flex-wrap:wrap;margin:10px 0 0;padding:9px 2px 12px;border-top:1px solid var(--line-2);font-size:11px;letter-spacing:.08em;color:var(--ink-3)}
+.plate-band .plate-title{color:var(--ink-2)}
+
+.feature{display:grid;grid-template-columns:1.12fr .88fr;gap:clamp(20px,3.4vw,44px);align-items:center;margin:46px 0 6px;padding-top:30px;border-top:1px solid var(--line)}
+.feature figure{margin:0}
+.feature img{width:100%;height:auto;display:block;padding:6px;background:#FBF8F0;border:1px solid var(--line);filter:saturate(.9) contrast(.98)}
+.feature h3{margin:0 0 10px;font-size:22px;font-weight:500;letter-spacing:.16em}
+.feature p{margin:0 0 10px;font-size:14px;line-height:1.95;color:var(--ink-2)}
+.feature .credit{font-size:11px;color:var(--ink-3);letter-spacing:.06em;border-top:1px solid var(--line-2);padding-top:8px;margin:14px 0 0}
+
+.case{display:grid;grid-template-columns:.92fr 1.08fr;margin:30px 0 36px;background:#211E1A;color:#E9E1D3;overflow:hidden}
+.case figure{margin:0;position:relative;min-height:270px;background:#0F0E0C}
+.case img{width:100%;height:100%;object-fit:cover;display:block}
+.case-text{padding:clamp(22px,3.2vw,38px);align-self:center}
+.case-kicker{display:block;font-size:10px;letter-spacing:.26em;color:#B58C58;margin-bottom:6px}
+.case h4{margin:0 0 10px;font-size:clamp(18px,2.2vw,22px);font-weight:500;letter-spacing:.1em;color:#F5EDDF}
+.case p{margin:0 0 12px;font-size:13.5px;line-height:2;color:#C8BEAD}
+.case .credit{font-size:11px;color:#8C8275;letter-spacing:.05em;margin:0}
+
+.poet{display:grid;grid-template-columns:minmax(0,280px) minmax(0,1fr);gap:clamp(22px,4vw,50px);align-items:center;margin:56px 0 6px;padding-top:32px;border-top:1px solid var(--line)}
+.poet figure{margin:0}
+.poet img{width:100%;height:auto;display:block;padding:6px;background:#FBF8F0;border:1px solid var(--line);filter:saturate(.92) contrast(.98)}
+.poet figcaption{margin-top:8px;font-size:11px;color:var(--ink-3);letter-spacing:.06em;line-height:1.7}
+.poet .case-kicker{color:var(--cinnabar)}
+.poet h3{margin:0 0 10px;font-size:22px;font-weight:500;letter-spacing:.14em}
+.poet p{margin:0;font-size:14px;line-height:2;color:var(--ink-2)}
+
+@media (max-width:860px){
+  .feature,.case,.poet{grid-template-columns:1fr}
+  .case figure{min-height:0;aspect-ratio:16/10}
+  .poet figure{max-width:300px;margin:0 auto}
+  .poet{gap:20px}
+}
+
+/* ============ 章节 ============ */
+.chapter{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:clamp(64px,9vw,120px) clamp(18px,4vw,32px);scroll-margin-top:58px}
+.chapter.tint{background:linear-gradient(180deg,transparent,rgba(239,231,214,.55),transparent);max-width:none}
+.chapter.tint > .chapter-inner{max-width:1080px;margin:0 auto}
+.chapter-head{display:flex;align-items:baseline;gap:14px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:34px;flex-wrap:wrap}
+.chapter-head .num{font-size:13px;letter-spacing:.2em;color:var(--cinnabar)}
+.chapter-head h2{margin:0;font-size:clamp(26px,4vw,38px);font-weight:500;letter-spacing:.18em}
+.chapter-head p{margin:0 0 0 auto;font-size:12px;letter-spacing:.16em;color:var(--ink-3)}
+.lead{font-size:clamp(15px,1.8vw,17px);color:var(--ink-2);line-height:2.05;max-width:46em;margin:0 0 40px}
+.lead em{font-style:normal;color:var(--tea);border-bottom:1px solid var(--celadon)}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+
+/* ============ 时间轴 ============ */
+.timeline{display:grid;grid-template-columns:220px 1fr;gap:clamp(20px,4vw,56px);align-items:start}
+.tl-items{display:flex;flex-direction:column;gap:2px}
+.tl-item{
+  display:flex;align-items:center;gap:14px;padding:14px 12px;text-align:left;
+  border-left:1px solid var(--line);transition:.28s var(--ease);position:relative;
+}
+.tl-item svg{width:34px;height:34px;flex:none;color:var(--ink-3);transition:.28s}
+.tl-item .t{display:flex;flex-direction:column;line-height:1.5}
+.tl-item .t b{font-size:17px;font-weight:500;letter-spacing:.1em}
+.tl-item .t span{font-size:11px;color:var(--ink-3);letter-spacing:.1em}
+.tl-item:hover{border-left-color:var(--tea-2);background:rgba(107,74,47,.04)}
+.tl-item.on{border-left:2px solid var(--cinnabar);background:rgba(176,58,46,.04)}
+.tl-item.on svg{color:var(--tea)}
+.tl-item.on .t b{color:var(--cinnabar)}
+.tl-panel{border:1px solid var(--line);padding:clamp(22px,3vw,34px);min-height:300px;background:rgba(255,255,255,.28)}
+.tl-panel h3{margin:0 0 4px;font-size:24px;font-weight:500;letter-spacing:.16em}
+.tl-panel .era-date{font-size:12px;letter-spacing:.16em;color:var(--ink-3);margin-bottom:18px}
+.tl-panel p{margin:0 0 16px;color:var(--ink-2);font-size:15px;line-height:2}
+.tl-points{list-style:none;padding:0;margin:0;display:grid;gap:9px}
+.tl-points li{position:relative;padding-left:18px;font-size:14px;color:var(--ink-2)}
+.tl-points li::before{content:"";position:absolute;left:0;top:.82em;width:6px;height:1px;background:var(--cinnabar)}
+.tl-fade{animation:fadeUp .45s var(--ease)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ============ 茶路 ============ */
+.tea-road{margin-top:44px;border:1px solid var(--line);padding:clamp(18px,3vw,26px);background:rgba(255,255,255,.28)}
+.tea-road h3{margin:0 0 8px;font-size:18px;font-weight:500;letter-spacing:.16em}
+.tea-road p{margin:0 0 16px;font-size:14px;color:var(--ink-2);line-height:1.95}
+.routes{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.routes div{border-top:1px solid var(--line);padding-top:9px;font-size:13px;color:var(--ink-2);line-height:1.9}
+.routes b{display:block;font-size:11px;letter-spacing:.16em;color:var(--cinnabar);font-weight:400;margin-bottom:3px}
+.tea-road .note{font-size:12.5px;color:var(--ink-3);border-left:2px solid var(--celadon);padding-left:11px;margin:16px 0 0;line-height:1.85}
+@media (max-width:640px){.routes{grid-template-columns:1fr}}
+
+/* ============ 发酵光谱 ============ */
+.spec-top{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:12px;flex-wrap:wrap}
+.spec-top .tip{font-size:13px;color:var(--ink-3)}
+.spectrum{position:relative;margin:0 0 16px}
+.axis{
+  position:relative;height:200px;border:1px solid var(--line);
+  background:linear-gradient(90deg,rgba(143,168,74,.15),rgba(216,200,120,.14) 20%,rgba(123,163,155,.13) 45%,rgba(176,58,46,.13) 80%,rgba(107,74,47,.17));
+  touch-action:none;
+}
+.axis .grid{position:absolute;inset:0;pointer-events:none}
+.axis .grid i{position:absolute;top:0;bottom:0;width:1px;background:var(--line-2)}
+.axis .grid i span{position:absolute;bottom:-24px;left:0;transform:translateX(-50%);font-size:11px;color:var(--ink-3);letter-spacing:.06em}
+.axis .grid i:first-child span{transform:none}
+.axis .grid i:last-child span{transform:translateX(-100%)}
+.axis .grid i.major{background:var(--line)}
+.axis-label{position:relative;height:16px;margin-top:30px;font-size:11px;color:var(--ink-3);letter-spacing:.14em}
+.axis-label span{position:absolute;top:0;transform:translateX(-50%);white-space:nowrap}
+.axis-label span:nth-child(1){left:3%}
+.axis-label span:nth-child(2){left:17%}
+.axis-label span:nth-child(3){left:50%}
+.axis-label span:nth-child(4){left:78%}
+.axis-label span:nth-child(5){left:94%}
+.tray{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;min-height:48px}
+.card{
+  position:relative;display:inline-flex;align-items:center;gap:8px;padding:10px 14px;
+  border:1px solid var(--line);background:var(--paper);border-radius:2px;
+  font-size:14px;letter-spacing:.08em;cursor:grab;user-select:none;touch-action:none;white-space:nowrap;
+  transition:box-shadow .2s,border-color .2s,transform .2s;
+}
+.card:hover{border-color:var(--tea);box-shadow:0 4px 14px rgba(107,74,47,.08)}
+.card .sw{width:9px;height:9px;border-radius:50%;flex:none}
+.card.placed{position:absolute;top:50%;transform:translate(-50%,-50%);cursor:pointer;z-index:2}
+.card.dragging{opacity:.28}
+.card.locked{border-color:var(--celadon);background:#fff;box-shadow:none}
+.card.locked::after{content:"✓";color:var(--celadon);font-size:12px;margin-left:2px}
+.card.sel{border-color:var(--cinnabar);box-shadow:inset 0 0 0 1px var(--cinnabar)}
+.spec-cursor{position:absolute;top:6px;bottom:6px;width:1px;background:var(--cinnabar);z-index:3;pointer-events:none}
+.spec-cursor::before{content:"";position:absolute;top:-3px;left:-3px;width:7px;height:7px;border-radius:50%;background:var(--cinnabar)}
+.axis:focus-visible{outline:1px dashed rgba(107,74,47,.32);outline-offset:4px}
+.card.wrong{animation:shakeX .4s;border-color:var(--cinnabar)}
+@keyframes shakeX{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.drag-ghost{
+  position:fixed;z-index:99;pointer-events:none;padding:9px 13px;background:#fff;
+  border:1px solid var(--tea);font-size:14px;box-shadow:0 8px 24px rgba(43,43,43,.14);
+  transform:translate(-50%,-50%);letter-spacing:.08em;
+}
+.tea-detail{border:1px solid var(--line);padding:clamp(18px,3vw,28px);min-height:190px;background:rgba(255,255,255,.3)}
+.tea-detail h3{margin:0;font-size:22px;font-weight:500;letter-spacing:.12em;display:flex;align-items:center;gap:10px}
+.tea-detail h3 .sw{width:12px;height:12px;border-radius:50%}
+.tea-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px 20px;margin:16px 0 0}
+.tea-meta div{font-size:13px;color:var(--ink-2);border-top:1px solid var(--line-2);padding-top:6px}
+.tea-meta b{display:block;font-weight:400;font-size:11px;color:var(--ink-3);letter-spacing:.14em;margin-bottom:2px}
+.cmp{margin-top:26px;border-top:1px solid var(--line);padding-top:22px;overflow-x:auto}
+.cmp table{width:100%;border-collapse:collapse;font-size:13px;min-width:620px}
+.cmp th,.cmp td{border-bottom:1px solid var(--line-2);padding:9px 10px;text-align:left;vertical-align:top}
+.cmp th{font-weight:500;color:var(--ink-3);font-size:11px;letter-spacing:.12em}
+.cmp td:first-child{white-space:nowrap;color:var(--ink)}
+
+/* ============ 二十四器 ============ */
+.vm-head{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:var(--ink-3);letter-spacing:.08em;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.vm-board{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.vm-col{display:flex;flex-direction:column;gap:8px}
+.chip{
+  padding:11px 13px;border:1px solid var(--line);background:rgba(255,255,255,.4);
+  text-align:left;font-size:14px;line-height:1.5;transition:.2s var(--ease);min-height:46px;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+}
+.chip:hover{border-color:var(--tea-2);background:#fff}
+.chip.sel{border-color:var(--tea);background:#fff;box-shadow:inset 0 0 0 1px var(--tea)}
+.chip.done{opacity:.4;border-color:var(--celadon);background:transparent;pointer-events:none;text-decoration:line-through;text-decoration-color:var(--celadon)}
+.chip.bad{animation:shake2 .4s;border-color:var(--cinnabar)}
+@keyframes shake2{0%,100%{transform:none}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.vm-msg{min-height:26px;font-size:13px;color:var(--tea);margin:14px 0 0}
+.vm-msg.bad{color:var(--cinnabar)}
+
+/* ============ 点茶 ============ */
+.sub-h{font-size:19px;font-weight:500;letter-spacing:.14em;margin:56px 0 10px;padding-top:24px;border-top:1px solid var(--line-2)}
+.sub-h:first-of-type{border-top:0;padding-top:0}
+.sub-p{font-size:14.5px;color:var(--ink-2);line-height:2;margin:0 0 22px;max-width:52em}
+.sub-p em{font-style:normal;color:var(--tea);border-bottom:1px solid var(--celadon)}
+.game-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(18px,3.4vw,44px);align-items:center}
+.canvas-wrap{position:relative;border:1px solid var(--line);background:radial-gradient(circle at 50% 45%,#FBF7EE,#EFE6D4);aspect-ratio:1;overflow:hidden}
+#whiskCanvas{width:100%;height:100%;touch-action:none;cursor:none}
+.canvas-hud{position:absolute;left:14px;top:12px;font-size:12px;letter-spacing:.14em;color:var(--ink-2);pointer-events:none}
+.canvas-hud b{color:var(--cinnabar);font-weight:500}
+.canvas-tip{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);font-size:11px;color:var(--ink-3);letter-spacing:.1em;pointer-events:none;white-space:nowrap}
+.meter{margin-bottom:16px}
+.meter label{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.14em;color:var(--ink-3);margin-bottom:5px}
+.meter label b{font-weight:400;color:var(--ink-2)}
+.band{position:relative;height:8px;background:rgba(43,43,43,.07)}
+.band .zone{position:absolute;top:0;bottom:0;left:27%;width:34%;background:var(--celadon-2)}
+.band .zone::before{content:"稳";position:absolute;left:50%;top:14px;transform:translateX(-50%);font-size:10px;color:var(--ink-3)}
+.band i{position:absolute;top:-3px;width:2px;height:14px;background:var(--cinnabar);left:0;transition:left .08s linear}
+.band i::after{content:"";position:absolute;top:-3px;left:-2px;width:6px;height:6px;border-radius:50%;background:var(--cinnabar)}
+.bar{height:8px;background:rgba(43,43,43,.07);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--tea);transition:width .12s linear}
+.bar.foam i{background:var(--celadon)}
+.result{border-left:2px solid var(--celadon);padding:10px 0 10px 14px;font-size:14px;color:var(--ink-2);min-height:60px;margin:18px 0}
+.result h4{margin:0 0 6px;font-size:15px;color:var(--ink);font-weight:500;letter-spacing:.1em}
+.score-big{font-size:34px;line-height:1;color:var(--cinnabar);font-family:var(--serif);letter-spacing:.02em}
+.score-big small{font-size:12px;color:var(--ink-3);letter-spacing:.14em;margin-left:6px}
+
+/* ============ 斗茶 ============ */
+.dc-top{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:var(--ink-3);letter-spacing:.08em;margin-bottom:14px}
+.dc-bowls{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,3vw,26px)}
+.bowl{
+  border:1px solid var(--line);background:rgba(255,255,255,.34);padding:18px 14px 16px;
+  text-align:center;transition:.25s var(--ease);position:relative;
+}
+.bowl:hover{border-color:var(--tea);background:#fff;transform:translateY(-2px)}
+.bowl.pick{border-color:var(--cinnabar);background:#fff;box-shadow:0 0 0 1px var(--cinnabar)}
+.bowl .cup{position:relative;width:110px;height:74px;margin:0 auto 12px;border-radius:0 0 60px 60px/0 0 44px 44px;border:1px solid var(--line);border-top:0;overflow:hidden;background:#FBF7EE}
+.bowl .cup .liquid{position:absolute;left:0;right:0;bottom:0;height:74%;opacity:.9}
+.bowl .cup .foam{position:absolute;left:0;right:0;top:8%;height:22%;background:radial-gradient(circle at 30% 40%,#fff,transparent 60%),radial-gradient(circle at 70% 60%,#fff,transparent 55%);opacity:.85}
+.bowl .name{font-size:12px;letter-spacing:.2em;color:var(--ink-3)}
+.bowl dl{margin:10px 0 0;font-size:12.5px;text-align:left;color:var(--ink-2);display:grid;grid-template-columns:auto 1fr;gap:3px 10px}
+.bowl dt{color:var(--ink-3);letter-spacing:.08em}
+.bowl dd{margin:0}
+.dc-reveal{margin-top:20px;font-size:14px;color:var(--ink-2);min-height:0}
+.dc-reveal .verdict{display:flex;gap:10px;align-items:baseline;margin-bottom:10px;font-size:15px;color:var(--ink)}
+.dc-reveal .verdict b{font-weight:500;color:var(--cinnabar);letter-spacing:.1em}
+.dc-crit{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.dc-crit div{border-top:1px solid var(--line);padding-top:8px;font-size:12px;line-height:1.7}
+.dc-crit b{display:block;font-size:11px;letter-spacing:.14em;color:var(--ink-3);font-weight:400}
+
+/* ============ 冲泡模拟 ============ */
+.brew{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(18px,4vw,48px);align-items:start}
+.brew-cup{position:relative;display:grid;place-items:center;min-height:250px;border:1px solid var(--line);background:radial-gradient(circle at 50% 60%,#FCF8EF,#F0E8D7);overflow:hidden}
+.cup-svg{width:76%;max-width:260px;filter:drop-shadow(0 12px 18px rgba(107,74,47,.10))}
+.steam{position:absolute;bottom:56%;left:50%;transform:translateX(-50%);width:70px;height:80px;opacity:.5}
+.steam span{position:absolute;bottom:0;left:50%;width:1px;height:60px;background:linear-gradient(transparent,rgba(107,74,47,.55));animation:steam 3.6s infinite var(--ease)}
+.steam span:nth-child(2){left:60%;height:72px;animation-delay:1.2s}
+.steam span:nth-child(3){left:40%;height:50px;animation-delay:2.3s}
+@keyframes steam{0%{opacity:0;transform:translateY(10px) scaleY(.4)}35%{opacity:.8}100%{opacity:0;transform:translateY(-34px) scaleY(1.2)}}
+.brew-controls{display:grid;gap:16px}
+.tea-picker{display:flex;flex-wrap:wrap;gap:6px}
+.tea-picker button{padding:7px 12px;border:1px solid var(--line);font-size:13px;letter-spacing:.08em;transition:.2s}
+.tea-picker button:hover{border-color:var(--tea-2)}
+.tea-picker button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.ctrl{display:grid;grid-template-columns:72px 1fr 78px;align-items:center;gap:12px;font-size:13px;color:var(--ink-2)}
+.ctrl b{text-align:right;font-weight:400;color:var(--tea);font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:2px;background:var(--line);outline:0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--paper);border:1px solid var(--tea);cursor:pointer;transition:.15s}
+input[type=range]::-webkit-slider-thumb:hover{background:var(--tea)}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--paper);border:1px solid var(--tea);cursor:pointer}
+.brew-out{border-top:1px solid var(--line);padding-top:16px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
+.brew-out .flavor{font-size:14px;color:var(--ink-2);line-height:1.9}
+.brew-out .flavor b{color:var(--ink);font-weight:500}
+.brew-tip{grid-column:1/-1;font-size:13px;color:var(--tea);border-left:2px solid var(--celadon);padding-left:12px;margin-top:2px}
+
+/* ============ 盲品 / 风味轮 ============ */
+.taste-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(20px,4vw,54px);align-items:start}
+.blind-top{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-3);letter-spacing:.1em;margin-bottom:12px}
+.clues{display:grid;gap:8px;margin-bottom:20px}
+.clue{display:flex;gap:10px;font-size:14px;color:var(--ink-2);border-bottom:1px dashed var(--line);padding-bottom:8px;animation:fadeUp .4s var(--ease) both}
+.clue i{font-style:normal;font-size:11px;letter-spacing:.14em;color:var(--cinnabar);flex:none;padding-top:2px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opt{
+  display:flex;align-items:center;gap:9px;padding:11px 13px;border:1px solid var(--line);
+  text-align:left;font-size:14px;transition:.2s var(--ease);min-height:46px;background:rgba(255,255,255,.34);
+}
+.opt:hover{border-color:var(--tea);background:#fff}
+.opt .k{font-size:11px;color:var(--ink-3);letter-spacing:.1em;border:1px solid var(--line);width:20px;height:20px;display:grid;place-items:center;flex:none}
+.opt.right{border-color:var(--celadon);background:rgba(123,163,155,.10)}
+.opt.wrong{border-color:var(--cinnabar);background:rgba(176,58,46,.06)}
+.opt:disabled{cursor:default;opacity:.75}
+.opt.right:disabled,.opt.wrong:disabled{opacity:1}
+.blind-fb{min-height:64px;margin-top:14px;font-size:13.5px;color:var(--ink-2);border-left:2px solid var(--celadon);padding-left:12px}
+.wheel-wrap{position:relative;display:grid;place-items:center;min-height:360px}
+.wheel{position:relative;width:min(100%,340px);aspect-ratio:1;border:1px solid var(--line-2);border-radius:50%}
+.wheel::before{content:"风味";position:absolute;inset:32%;border:1px solid var(--line-2);border-radius:50%;display:grid;place-items:center;font-size:12px;letter-spacing:.3em;color:var(--ink-3)}
+.wheel button{
+  position:absolute;transform:translate(-50%,-50%);white-space:nowrap;padding:5px 9px;
+  border:1px solid var(--line);background:var(--paper);font-size:12px;letter-spacing:.04em;
+  transition:.2s var(--ease);z-index:2;
+}
+.wheel button:hover{border-color:var(--tea);background:#fff}
+.wheel button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.wheel-info{text-align:center;max-width:300px;margin:16px auto 0;font-size:13px;color:var(--ink-2);min-height:50px}
+.wheel-info b{display:block;color:var(--ink);letter-spacing:.14em;font-weight:500;margin-bottom:4px}
+
+/* ============ 民俗 / 诗 ============ */
+.rituals{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+.ritual{border:1px solid var(--line);padding:20px 18px;background:rgba(255,255,255,.3);transition:.25s var(--ease);cursor:pointer}
+.ritual:hover{border-color:var(--tea-2);background:#fff}
+.ritual .where{font-size:11px;letter-spacing:.16em;color:var(--ink-3)}
+.ritual h3{margin:4px 0 8px;font-size:19px;font-weight:500;letter-spacing:.1em}
+.ritual p{margin:0;font-size:13px;color:var(--ink-2);line-height:1.9}
+.ritual .go{margin-top:12px;font-size:11px;letter-spacing:.16em;color:var(--tea)}
+.ritual.on{border-color:var(--tea);background:#fff}
+.ritual-detail{margin-top:16px;border:1px solid var(--line);padding:20px;display:none;background:rgba(255,255,255,.5)}
+.ritual-detail.show{display:block;animation:fadeUp .4s var(--ease)}
+.steps{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;scrollbar-width:thin}
+.step{flex:none;width:150px;border-top:1px solid var(--tea);padding-top:8px;font-size:12.5px;color:var(--ink-2);line-height:1.7}
+.step b{display:block;font-size:11px;letter-spacing:.14em;color:var(--cinnabar);font-weight:400}
+.ritual-quiz{margin-top:8px;border-top:1px dashed var(--line);padding-top:14px}
+.ritual-quiz p{margin:0 0 10px;font-size:14px;color:var(--ink)}
+.rq-opts{display:flex;flex-wrap:wrap;gap:8px}
+.rq-opts button{padding:7px 12px;border:1px solid var(--line);font-size:13px;transition:.2s}
+.rq-opts button:hover{border-color:var(--tea)}
+.rq-opts button.ok{border-color:var(--celadon);background:rgba(123,163,155,.14)}
+.rq-opts button.no{border-color:var(--cinnabar);background:rgba(176,58,46,.08)}
+.rq-fb{font-size:12.5px;color:var(--ink-2);margin-top:10px;min-height:20px}
+.poems{margin-top:56px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start}
+.poem-card{border:1px solid var(--line);padding:clamp(20px,3vw,34px);background:rgba(255,255,255,.34);min-height:300px}
+.poem-text{display:flex;flex-direction:row-reverse;gap:18px;justify-content:center;margin:0;min-height:200px;max-width:100%;overflow-x:auto;padding-bottom:6px}
+.poem-text span{
+  writing-mode:vertical-rl;text-orientation:upright;line-height:2.1;font-size:17px;
+  letter-spacing:.24em;color:var(--ink);
+}
+.poem-text .author{font-size:11px;letter-spacing:.16em;color:var(--ink-3);align-self:flex-end;writing-mode:vertical-rl}
+.poem-note{margin-top:18px;border-top:1px solid var(--line-2);padding-top:14px;font-size:13.5px;color:var(--ink-2);line-height:2}
+.poem-note b{font-weight:500;color:var(--tea)}
+.poem-side{display:flex;flex-direction:column;gap:6px}
+.poem-side button{padding:8px 10px;font-size:12px;letter-spacing:.1em;border:1px solid var(--line);white-space:nowrap;transition:.2s}
+.poem-side button:hover{border-color:var(--ink)}
+.poem-side button.on{background:var(--ink);color:var(--paper)}
+
+/* ============ 考试 ============ */
+.exam-shell{border:1px solid var(--line);background:rgba(255,255,255,.36)}
+.exam-top{display:flex;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.exam-top .rank{font-size:13px;letter-spacing:.12em;color:var(--tea)}
+.exam-top .rank b{color:var(--cinnabar);font-weight:500}
+.exam-top .stat{margin-left:auto;font-size:12px;color:var(--ink-3);letter-spacing:.1em;font-variant-numeric:tabular-nums}
+.exam-body{padding:clamp(20px,4vw,40px);min-height:380px}
+.exam-intro{max-width:44em;margin:0 auto;text-align:center}
+.exam-intro h3{margin:0 0 14px;font-size:24px;font-weight:500;letter-spacing:.16em}
+.exam-intro p{color:var(--ink-2);font-size:14px;line-height:2;margin:0 0 10px}
+.ranks{display:flex;justify-content:center;gap:0;margin:26px 0 30px;flex-wrap:wrap}
+.ranks div{padding:8px 14px;border-top:1px solid var(--line);font-size:12px;color:var(--ink-3);letter-spacing:.1em;position:relative}
+.ranks div::before{content:"";position:absolute;left:50%;top:-3px;width:5px;height:5px;border-radius:50%;background:var(--line);transform:translateX(-50%)}
+.q-head{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;letter-spacing:.14em;color:var(--ink-3);margin-bottom:14px}
+.q-level{padding:2px 8px;border:1px solid var(--line)}
+.q-stem{font-size:clamp(17px,2.2vw,21px);line-height:1.85;margin:0 0 24px;letter-spacing:.02em}
+.q-opts{display:grid;gap:9px}
+.q-opt{
+  display:flex;align-items:flex-start;gap:12px;padding:13px 15px;border:1px solid var(--line);
+  text-align:left;font-size:15px;line-height:1.7;transition:.2s var(--ease);background:rgba(255,255,255,.4);
+}
+.q-opt:hover:not(:disabled){border-color:var(--tea);background:#fff;transform:translateX(2px)}
+.q-opt .k{font-size:11px;letter-spacing:.06em;color:var(--ink-3);border:1px solid var(--line);width:22px;height:22px;display:grid;place-items:center;flex:none;margin-top:2px}
+.q-opt.right{border-color:var(--celadon);background:rgba(123,163,155,.12)}
+.q-opt.right .k{border-color:var(--celadon);color:var(--celadon)}
+.q-opt.wrong{border-color:var(--cinnabar);background:rgba(176,58,46,.06)}
+.q-opt.wrong .k{border-color:var(--cinnabar);color:var(--cinnabar)}
+.q-opt:disabled{cursor:default}
+.q-fb{margin-top:20px;border-left:2px solid var(--celadon);padding:2px 0 2px 14px;font-size:14px;line-height:1.95;color:var(--ink-2);animation:fadeUp .35s var(--ease)}
+.q-fb.bad{border-color:var(--cinnabar)}
+.q-fb b{color:var(--ink);font-weight:500}
+.q-foot{margin-top:22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.exam-result{text-align:center;max-width:40em;margin:0 auto}
+.exam-result .score-big{font-size:56px}
+.exam-result h3{margin:8px 0 2px;font-size:22px;font-weight:500;letter-spacing:.2em}
+.exam-result p{color:var(--ink-2);font-size:14px;line-height:2}
+.exam-result .weak{display:inline-block;margin:4px 4px 0;padding:4px 10px;border:1px solid var(--line);font-size:12px;color:var(--tea)}
+.wrong-list{margin-top:24px;text-align:left}
+.wrong-list details{border-bottom:1px solid var(--line-2);padding:10px 0}
+.wrong-list summary{cursor:pointer;font-size:14px;color:var(--ink-2)}
+.wrong-list p{font-size:13px;margin:8px 0 0}
+
+/* ============ 图鉴弹层 / 引导 / 提示 ============ */
+.modal{position:fixed;inset:0;z-index:80;display:none;background:rgba(43,43,43,.32);backdrop-filter:blur(2px);padding:clamp(10px,3vw,40px);overflow:auto}
+.modal.show{display:grid;place-items:start center;animation:fade .25s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.modal-card{width:min(920px,100%);background:var(--paper);border:1px solid var(--line);padding:clamp(18px,3vw,32px);margin:auto;position:relative}
+.modal-head{display:flex;align-items:baseline;gap:14px;margin-bottom:18px}
+.modal-head h2{margin:0;font-size:20px;font-weight:500;letter-spacing:.18em}
+.modal-head span{font-size:12px;color:var(--ink-3);letter-spacing:.1em}
+.modal-close{margin-left:auto;font-size:20px;line-height:1;padding:6px 8px;color:var(--ink-3)}
+.modal-close:hover{color:var(--cinnabar)}
+.codex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px}
+.codex-item{border:1px solid var(--line-2);padding:12px 10px;text-align:center;font-size:13px;line-height:1.4;min-height:74px;display:grid;place-items:center;color:var(--ink-2);transition:.2s}
+.codex-item.locked{color:var(--ink-3);background:repeating-linear-gradient(45deg,transparent,transparent 6px,rgba(43,43,43,.03) 6px,rgba(43,43,43,.03) 12px)}
+.codex-item:not(.locked){cursor:pointer;background:#fff}
+.codex-item:not(.locked):hover{border-color:var(--tea)}
+.codex-item small{display:block;font-size:10px;color:var(--ink-3);letter-spacing:.1em;margin-top:2px}
+.codex-detail{margin-top:16px;border-top:1px solid var(--line);padding-top:14px;font-size:13.5px;color:var(--ink-2);min-height:60px;line-height:1.9}
+.codex-detail b{color:var(--ink);letter-spacing:.1em}
+.guide{position:fixed;inset:0;z-index:90;display:none;background:rgba(245,240,230,.96);padding:24px;place-items:center}
+.guide.show{display:grid}
+.guide-card{max-width:520px;text-align:center}
+.guide-card h2{font-size:24px;font-weight:500;letter-spacing:.2em;margin:0 0 10px}
+.guide-steps{display:grid;gap:14px;margin:26px 0;text-align:left}
+.guide-steps div{display:flex;gap:14px;align-items:flex-start;font-size:14px;color:var(--ink-2)}
+.guide-steps b{font-weight:500;color:var(--cinnabar);font-size:18px;line-height:1.4}
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);z-index:95;
+  background:var(--ink);color:var(--paper);font-size:13px;letter-spacing:.1em;
+  padding:9px 18px;border-radius:2px;opacity:0;pointer-events:none;transition:.3s var(--ease);
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ============ 响应式 ============ */
+@media (max-width:860px){
+  .topnav{display:none}
+  .timeline{grid-template-columns:1fr;gap:18px}
+  .tl-items{flex-direction:row;overflow-x:auto;gap:2px}
+  .tl-item{flex:none;border-left:0;border-bottom:1px solid var(--line);padding:10px 12px}
+  .tl-item.on{border-left:0;border-bottom:2px solid var(--cinnabar)}
+  .tl-item svg{width:26px;height:26px}
+  .tl-item .t b{font-size:15px}
+  .game-grid,.brew,.taste-grid,.poems{grid-template-columns:1fr}
+  .poem-side{flex-direction:row;overflow-x:auto;padding-bottom:6px}
+  .poems{gap:16px}
+  .vm-board{gap:8px}
+  .chip{font-size:13px;padding:9px 10px;min-height:44px}
+  .axis{height:170px}
+  .dc-crit{grid-template-columns:1fr}
+  .brew-cup{min-height:200px}
+  .brush-legend{display:none}
+}
+@media (max-width:520px){
+  body{font-size:15px}
+  .hero{padding-top:96px}
+  .chapter{padding-left:16px;padding-right:16px}
+  .chapter-head p{margin-left:0;width:100%}
+  .opt,.opts{grid-template-columns:1fr}
+  .codex-grid{grid-template-columns:repeat(auto-fill,minmax(88px,1fr))}
+  .topbar{gap:8px}
+  .brand small{display:none}
+}
+.lang-en{font-family:"Palatino Linotype","Book Antiqua",Palatino,Georgia,"Times New Roman",serif}
+.lang-en .hero-title{font-size:clamp(36px,7.4vw,74px);letter-spacing:.02em;line-height:1.18}
+.lang-en .hero-kicker{letter-spacing:.26em;font-size:11px}
+.lang-en .hero-scroll{letter-spacing:.14em;font-size:10px}
+.lang-en .hero-title span:nth-child(2){margin-left:.35em}
+.lang-en .wheel::before{content:"Flavours"}
+.lang-en .band .zone::before{content:"steady"}
+.lang-en .poem-text{display:block;min-height:0}
+.lang-en .poem-text span{display:block;writing-mode:horizontal-tb;text-orientation:initial;font-size:15.5px;line-height:1.9;letter-spacing:.01em;padding:0}
+.lang-en .poem-text .author{display:block;margin-top:12px;font-size:11px;letter-spacing:.14em;color:var(--ink-3)}
+@media (max-width:640px){
+  .axis{height:260px}
+}
+.lang-btn{min-width:54px;justify-content:center;letter-spacing:.08em}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M12 21V9"/><path d="M12 9c0-4 3-6 8-6 0 5-3 8-8 8"/><path d="M12 13c-5 0-8-3-8-8 5 0 8 3 8 8"/></svg>
+    <b>茶</b><small>一片叶子的一生</small>
+  </div>
+  <nav class="topnav" aria-label="章节导航">
+    <a href="#origin">源</a><a href="#types">类</a><a href="#vessels">器</a>
+    <a href="#craft">艺</a><a href="#taste">味</a><a href="#ritual">礼</a><a href="#exam">考</a>
+  </nav>
+  <div class="tools">
+    <button class="tool-btn lang-btn" id="langBtn" aria-label="切换语言 / Switch language">EN</button>
+    <button class="tool-btn" id="soundBtn" aria-pressed="false"><span class="dot"></span><span class="lbl">声音 关</span></button>
+    <button class="tool-btn" id="codexBtn"><span class="lbl">图鉴</span> <span id="codexCount">0/53</span></button>
+  </div>
+</header>
+<div class="scroll-line" id="scrollLine"></div>
+
+<main>
+  <section class="hero" id="top">
+    <div class="hero-bg" aria-hidden="true">
+      <img src="assets/img/tea-hills.jpg" alt="" width="1600" height="971" fetchpriority="high" decoding="async">
+    </div>
+    <div class="hero-inner">
+      <p class="hero-kicker">中国茶文化 · 互动长卷</p>
+      <h1 class="hero-title"><span>一片叶子</span><span>的一生</span></h1>
+      <p class="hero-sub">从山场到茶杯，六章、<br class="br-sm">六场小游戏、四十道题。<br>每一步，都要你亲自动手。</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#origin">开始</a>
+        <a class="btn ghost" href="#exam">直接考一场</a>
+      </div>
+    </div>
+    <div class="hero-scroll">向下 · 叶子正在舒展</div>
+  </section>
+
+  <!-- 开卷图 -->
+  <section class="plate-band" aria-label="开卷图">
+    <figure>
+      <img src="assets/img/herbs.jpg" width="1234" height="328" loading="lazy" decoding="async"
+           alt="清代禹之鼎《春溪洗药图》局部：溪边洗药，席上设器"
+           data-alt-zh="清代禹之鼎《春溪洗药图》局部：溪边洗药，席上设器"
+           data-alt-en="Yu Zhiding, Cleansing Medicinal Herbs in the Stream, detail: washing herbs beside a spring">
+      <figcaption>
+        <span class="plate-title" data-zh="春溪洗药 · 茶最初是药" data-en="Washing Herbs by a Spring · tea began as medicine">春溪洗药 · 茶最初是药</span>
+        <span class="credit" data-zh="清 · 禹之鼎《春溪洗药图》局部 · 克利夫兰艺术博物馆藏，CC0" data-en="Yu Zhiding, Qing dynasty, 1703 · detail · Cleveland Museum of Art, CC0">清 · 禹之鼎《春溪洗药图》局部 · 克利夫兰艺术博物馆藏，CC0</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- 一 · 源 -->
+  <section class="chapter reveal" id="origin">
+    <header class="chapter-head"><span class="num">一</span><h2>源</h2><p>茶从哪来 · 四代饮法</p></header>
+    <p class="lead">同一片叶子，唐人煮它、宋人点它、明人泡它、清人功夫它。喝法的变化，比茶本身更能说明中国人怎么过日子。点击左侧四代，看每个时代的人如何把茶送进嘴里。</p>
+    <div class="timeline">
+      <div class="tl-items" id="tlItems" role="tablist" aria-label="四个时代的饮茶方式"></div>
+      <div class="tl-panel" id="tlPanel" role="tabpanel"></div>
+    </div>
+    <aside class="feature">
+      <figure>
+        <img src="assets/img/mountains.jpg" width="600" height="330" loading="lazy" decoding="async"
+             alt="元代陈汝言、倪瓒《仙山楼阁图》局部，青绿山水"
+             data-alt-zh="元代陈汝言、倪瓒《仙山楼阁图》局部，青绿山水"
+             data-alt-en="Chen Ruyan and Ni Zan, Mountains of the Immortals, detail: blue-green landscape">
+      </figure>
+      <div>
+        <h3 data-zh="山场" data-en="The mountain">山场</h3>
+        <p data-zh="好茶先要好山。云雾、坡度、朝向与土壤，决定一片叶子能攒下多少氨基酸和糖。高山茶耐泡，不是因为海拔这个数字，而是因为长得慢。" data-en="Good tea begins with a good mountain. Mist, slope, aspect and soil decide how much amino acid and sugar a leaf can store. High-mountain tea lasts because it grows slowly, not because of the number on the map.">好茶先要好山。云雾、坡度、朝向与土壤，决定一片叶子能攒下多少氨基酸和糖。高山茶耐泡，不是因为海拔这个数字，而是因为长得慢。</p>
+        <p class="credit" data-zh="元 · 陈汝言、倪瓒《仙山楼阁图》局部 · 克利夫兰艺术博物馆藏，CC0" data-en="Chen Ruyan and Ni Zan, Yuan dynasty · detail · Cleveland Museum of Art, CC0">元 · 陈汝言、倪瓒《仙山楼阁图》局部 · 克利夫兰艺术博物馆藏，CC0</p>
+      </div>
+    </aside>
+    <div class="tea-road">
+      <h3>一杯茶的路</h3>
+      <p>茶不只往杯子里走，也往边疆走。中原缺马，边地缺茶——游牧饮食多肉少菜，茶能解腻、补充维生素，于是有了延续千年的"茶马互市"。茶压成砖，马赶成队，一条路把两种生活接在一起。</p>
+      <div class="routes">
+        <div><b>川藏线</b>雅安（蒙顶）→ 康定（打箭炉）→ 昌都 → 拉萨；以边茶（康砖、金尖）换马、盐与皮毛。</div>
+        <div><b>滇藏线</b>普洱 → 大理 → 丽江 → 中甸 → 拉萨；普洱茶压成饼、沱，耐运输、耐存放。</div>
+      </div>
+      <p class="note">"茶马古道"是 1990 年代才提出的说法，历史上通称"茶马互市"。讲古代史时，用后者更准确。</p>
+    </div>
+  </section>
+
+  <!-- 二 · 类 -->
+  <section class="chapter tint reveal" id="types"><div class="chapter-inner">
+    <header class="chapter-head"><span class="num">二</span><h2>类</h2><p>六大茶类 · 一条发酵光谱</p></header>
+    <p class="lead">六大茶类不是六种树，而是<em>同一片叶子被"发酵"到什么程度</em>。把六张茶卡拖到下方光谱上的正确位置——位置对了，卡片会定住，并解锁它的三款代表茶。</p>
+    <div class="spec-top">
+      <div class="tip">拖动卡片 → 放到光谱上的对应位置</div>
+      <div class="tip" id="specStat">已归位 0 / 6</div>
+    </div>
+    <div class="spectrum">
+      <div class="axis" id="axis">
+        <div class="grid" id="axisGrid"></div>
+      </div>
+      <div class="axis-label"><span>不发酵</span><span>微发酵</span><span>半发酵</span><span>全发酵</span><span>后发酵</span></div>
+      <div class="tray" id="tray"></div>
+    </div>
+    <div class="tea-detail" id="teaDetail"><p class="tip" style="color:var(--ink-3);font-size:13px;margin:0">点一张茶卡，查看它的工艺、汤色与代表茶。</p></div>
+    <div class="cmp" id="cmp" hidden></div>
+  </div></section>
+
+  <!-- 三 · 器 -->
+  <section class="chapter reveal" id="vessels">
+    <header class="chapter-head"><span class="num">三</span><h2>器</h2><p>陆羽二十四器 · 配对解锁</p></header>
+    <p class="lead">陆羽在《茶经·四之器》里为煮一碗茶准备了二十四件器具。这里分成四组，把器物和它的用途配成对。配对成功，图鉴里就多一件。</p>
+    <div class="vm-head">
+      <span>第 <b id="vmRound">1</b> / 4 组</span>
+      <span>已配对 <b id="vmCount">0</b> / 24 · 错 <b id="vmErr">0</b> 次</span>
+    </div>
+    <div class="vm-board">
+      <div class="vm-col" id="vmNames" aria-label="器物名"></div>
+      <div class="vm-col" id="vmUses" aria-label="用途"></div>
+    </div>
+    <p class="vm-msg" id="vmMsg" role="status"></p>
+  </section>
+
+  <!-- 四 · 艺 -->
+  <section class="chapter tint reveal" id="craft"><div class="chapter-inner">
+    <header class="chapter-head"><span class="num">四</span><h2>艺</h2><p>点茶 · 斗茶 · 冲泡</p></header>
+    <p class="lead">宋代人喝茶是"点"出来的：把茶粉调成膏，用竹筅击拂出乳白的汤花。下面三件事，一件比一件讲究手感。</p>
+
+    <h3 class="sub-h">其一 · 点茶击拂</h3>
+    <p class="sub-p">按住鼠标或手指，在盏里<em>画圈</em>。速度落在绿色"稳"区，汤花才会细。共七汤，参考《大观茶论》的节奏：先轻后急，收在细处。</p>
+    <div class="game-grid">
+      <div class="canvas-wrap">
+        <canvas id="whiskCanvas"></canvas>
+        <div class="canvas-hud">第 <b id="whiskTxt">1</b> 汤 / 共 7 汤</div>
+        <div class="canvas-tip">按住画圈 · 速度保持在中段</div>
+      </div>
+      <div class="game-side">
+        <div class="meter"><label>击拂速度 <b id="speedLbl">0</b></label><div class="band"><b class="zone"></b><i id="speedMark"></i></div></div>
+        <div class="meter"><label>汤花细腻度 <b id="foamLbl">0%</b></label><div class="bar foam"><i id="foamBar"></i></div></div>
+        <div class="result" id="whiskResult"><span style="color:var(--ink-3);font-size:13px">击拂七汤后，这里会给你一盏的评语。</span></div>
+        <button class="btn ghost" id="whiskReset">重新点一盏</button>
+      </div>
+    </div>
+
+    <h3 class="sub-h">其二 · 斗茶</h3>
+    <p class="sub-p">斗茶比三样：<em>汤色</em>、<em>汤花</em>、<em>水痕</em>。标准出自蔡襄《茶录》——汤色贵白，汤花要咬盏，水痕先退的一方输。三局两胜，你来当裁判。</p>
+    <div class="case">
+      <figure>
+        <img src="assets/img/jian-bowl.jpg" width="900" height="608" loading="lazy" decoding="async"
+             alt="南宋建盏，兔毫纹，黑釉"
+             data-alt-zh="南宋建盏，兔毫纹，黑釉"
+             data-alt-en="Jian ware tea bowl with hare’s-fur pattern, Song dynasty">
+      </figure>
+      <div class="case-text">
+        <span class="case-kicker" data-zh="器物" data-en="OBJECT">器物</span>
+        <h4 data-zh="为什么斗茶用黑盏" data-en="Why tea contests used black bowls">为什么斗茶用黑盏</h4>
+        <p data-zh="黑釉不是为了好看，是为了衬白。汤花越白，黑底越显；建盏的兔毫、油滴，是窑火里铁析出的结晶，每一只都不一样。" data-en="The dark glaze was not for beauty but for contrast: the whiter the foam, the more it shows against black. Hare’s-fur and oil-spot patterns are iron crystals grown in the kiln — no two bowls alike.">黑釉不是为了好看，是为了衬白。汤花越白，黑底越显；建盏的兔毫、油滴，是窑火里铁析出的结晶，每一只都不一样。</p>
+        <p class="credit" data-zh="南宋 建盏 · 克利夫兰艺术博物馆藏，CC0" data-en="Jian ware tea bowl, Song dynasty · Cleveland Museum of Art, CC0">南宋 建盏 · 克利夫兰艺术博物馆藏，CC0</p>
+      </div>
+    </div>
+    <div class="dc-top"><span>第 <b id="dcRound">1</b> / 3 局</span><span id="dcScore">你 0 : 0 对手</span></div>
+    <div class="dc-bowls" id="dcBowls"></div>
+    <div class="dc-reveal" id="dcReveal"></div>
+
+    <h3 class="sub-h">其三 · 冲泡模拟</h3>
+    <p class="sub-p">选一款茶，调水温、时间、茶水比，看它会发生什么。分数只是参考，<em>趋势</em>才是真知识。</p>
+    <div class="brew">
+      <div class="brew-cup">
+        <div class="steam"><span></span><span></span><span></span></div>
+        <svg class="cup-svg" viewBox="0 0 200 170" aria-hidden="true">
+          <path d="M38 52h124l-10 78c-1 9-8 15-17 15H65c-9 0-16-6-17-15z" fill="#FBF7EE" stroke="#2B2B2B" stroke-width="1.2" stroke-opacity=".55"/>
+          <path id="brewLiquid" d="M45 78h110l-7 52c-1 8-7 13-15 13H67c-8 0-14-5-15-13z" fill="#D9E3B4" opacity=".85"/>
+          <ellipse cx="100" cy="78" rx="55" ry="8" fill="#fff" opacity=".35"/>
+          <path d="M100 145v12M70 157h60" stroke="#2B2B2B" stroke-width="1.2" stroke-opacity=".35"/>
+        </svg>
+      </div>
+      <div class="brew-controls">
+        <div class="tea-picker" id="brewPicker"></div>
+        <div class="ctrl"><span>水温</span><input type="range" id="brewTemp" min="70" max="100" value="85" step="1" aria-label="水温"><b id="brewTempV">85℃</b></div>
+        <div class="ctrl"><span>时间</span><input type="range" id="brewTime" min="10" max="300" value="30" step="5" aria-label="浸泡时间"><b id="brewTimeV">30s</b></div>
+        <div class="ctrl"><span>茶水比</span><input type="range" id="brewRatio" min="20" max="100" value="50" step="1" aria-label="茶水比"><b id="brewRatioV">1:50</b></div>
+        <div class="brew-out">
+          <div><span class="score-big" id="brewScore">--</span><small>分</small></div>
+          <div class="flavor" id="brewFlavor">调一调，看看茶汤怎么变。</div>
+          <div class="brew-tip" id="brewTip"></div>
+        </div>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- 五 · 味 -->
+  <section class="chapter reveal" id="taste">
+    <header class="chapter-head"><span class="num">五</span><h2>味</h2><p>盲品 · 风味轮</p></header>
+    <p class="lead">看外形、看汤色、闻香、尝味——茶人判断一款茶，靠的是三条线索的交叉验证。八道盲品，从三条线索里猜出茶类。</p>
+    <div class="taste-grid">
+      <div class="blind">
+        <div class="blind-top"><span>盲品 · 第 <b id="blindIdx">1</b> / 8 题</span><span>连对 <b id="blindStreak">0</b> · 答对 <b id="blindScore">0</b></span></div>
+        <div class="clues" id="blindClues"></div>
+        <div class="opts" id="blindOpts"></div>
+        <div class="blind-fb" id="blindFb"></div>
+        <div style="margin-top:10px;display:flex;gap:10px"><button class="btn ghost" id="blindNext" hidden>下一题</button><button class="btn ghost" id="blindReset">重来</button></div>
+      </div>
+      <div class="wheel-wrap">
+        <div class="wheel" id="wheel"></div>
+        <div class="wheel-info" id="wheelInfo"><b>十二种香</b>点一个词，看看它到底在说什么。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 六 · 礼 -->
+  <section class="chapter tint reveal" id="ritual"><div class="chapter-inner">
+    <header class="chapter-head"><span class="num">六</span><h2>礼</h2><p>五地茶俗 · 六首茶诗</p></header>
+    <p class="lead">茶从来不只是饮料。它是待客的规矩、是高原上的热量、是客家人碗里的咸香。点开每一张卡，看一地的茶怎么喝、怎么待客。</p>
+    <div class="rituals" id="rituals"></div>
+    <div class="ritual-detail" id="ritualDetail"></div>
+
+    <div class="poet">
+      <figure>
+        <img src="assets/img/lu-tong.jpg" width="575" height="885" loading="lazy" decoding="async"
+             alt="清代闵贞《卢仝与侍者》，卢仝坐于松下，旁有茶炉"
+             data-alt-zh="清代闵贞《卢仝与侍者》，卢仝坐于松下，旁有茶炉"
+             data-alt-en="Min Zhen, Lu Tong and Servant: the poet seated under a pine beside a tea stove">
+        <figcaption data-zh="清 · 闵贞《卢仝与侍者》1788 · 克利夫兰艺术博物馆藏，CC0" data-en="Min Zhen, Lu Tong and Servant, 1788 · Cleveland Museum of Art, CC0">清 · 闵贞《卢仝与侍者》1788 · 克利夫兰艺术博物馆藏，CC0</figcaption>
+      </figure>
+      <div>
+        <span class="case-kicker" data-zh="诗人" data-en="POET">诗人</span>
+        <h3 data-zh="卢仝与七碗茶" data-en="Lu Tong and the seven bowls">卢仝与七碗茶</h3>
+        <p data-zh="卢仝（约 795—835）收到朋友寄来的新茶，写下《七碗茶歌》。从此中国人说茶，绕不开“七碗”和“两腋清风”。这幅清代闵贞的画，画的就是他。" data-en="Lu Tong (c. 795–835) received new tea from a friend and wrote the Song of Seven Bowls. Ever since, Chinese writing about tea returns to seven bowls and a wind under the arms. This Qing portrait by Min Zhen shows him.">卢仝（约 795—835）收到朋友寄来的新茶，写下《七碗茶歌》。从此中国人说茶，绕不开“七碗”和“两腋清风”。这幅清代闵贞的画，画的就是他。</p>
+      </div>
+    </div>
+    <div class="poems">
+      <article class="poem-card" aria-live="polite">
+        <div class="poem-text" id="poemText"></div>
+        <div class="poem-note" id="poemNote"></div>
+      </article>
+      <div class="poem-side" id="poemSide" aria-label="茶诗目录"></div>
+    </div>
+  </div></section>
+
+  <!-- 考 -->
+  <section class="chapter reveal" id="exam">
+    <header class="chapter-head"><span class="num">考</span><h2>茶博士考</h2><p>四十题 · 五级称号</p></header>
+    <div class="exam-shell">
+      <div class="exam-top">
+        <div class="rank">当前称号 <b id="examRank">茶客</b></div>
+        <div class="stat" id="examStat">共 40 题 · 四层难度</div>
+      </div>
+      <div class="exam-body" id="examBody"></div>
+    </div>
+  </section>
+
+  <footer class="chapter" style="border-top:1px solid var(--line);padding-top:34px;padding-bottom:60px;color:var(--ink-3);font-size:12px;letter-spacing:.08em">
+    <p style="margin:0 0 6px">本文为文化科普，不构成任何健康建议。史料以《茶经》《茶录》《大观茶论》及通行茶学教材为据。</p>
+    <p style="margin:0 0 6px">一片叶子的一生 · 互动长卷 · 本地离线运行，无任何外部请求</p>
+    <p style="margin:0" data-zh="图片：克利夫兰艺术博物馆开放数据（CC0）；背景照片：Duc Nguyen / Pexels" data-en="Images: Cleveland Museum of Art Open Access (CC0); background photo: Duc Nguyen / Pexels">图片：克利夫兰艺术博物馆开放数据（CC0）；背景照片：Duc Nguyen / Pexels</p>
+  </footer>
+</main>
+
+<div class="modal" id="codexModal" role="dialog" aria-modal="true" aria-labelledby="codexTitle">
+  <div class="modal-card">
+    <div class="modal-head"><h2 id="codexTitle">茶事图鉴</h2><span id="codexSub">0 / 53</span><button class="modal-close" id="codexClose" aria-label="关闭">×</button></div>
+    <div class="codex-grid" id="codexGrid"></div>
+    <div class="codex-detail" id="codexDetail">已解锁的条目可以点开，看看它到底是什么。</div>
+  </div>
+</div>
+
+<div class="guide" id="guide">
+  <div class="guide-card">
+    <h2>先看三件事</h2>
+    <p style="color:var(--ink-2);font-size:13px;margin:0">这个页面不需要你读，需要你动手。</p>
+    <div class="guide-steps">
+      <div><b>一</b><span><strong>拖</strong>：把六张茶卡拖到发酵光谱上，放对了会定住。</span></div>
+      <div><b>二</b><span><strong>划</strong>：在盏里按住画圈，击拂出汤花，七汤为一盏。</span></div>
+      <div><b>三</b><span><strong>答</strong>：盲品、斗茶、四十道茶博士考，答错会记进错题本。</span></div>
+    </div>
+    <button class="btn primary" id="guideStart">开始</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* 语言：默认中文，选择存入 localStorage，切换后整页重载 */
+(function () {
+  try { window.LANG = localStorage.getItem('tea_lang') === 'en' ? 'en' : 'zh'; }
+  catch (e) { window.LANG = 'zh'; }
+})();
+</script>
+<script>
+/* =========================================================
+   DATA —— 全部文案与题库集中在此，替换内容只改这里
+   ========================================================= */
+const LANG = window.LANG;
+const TX = (zh, en) => LANG === 'en' ? en : zh;
+const DATA_ZH = {
+
+  /* 称号 */
+  titles: [
+    { name:'茶客', min:0 },
+    { name:'茶徒', min:8 },
+    { name:'茶人', min:20 },
+    { name:'茶师', min:32 },
+    { name:'茶博士', min:36 }
+  ],
+
+  /* 一 · 源：四个时代 */
+  eras: [
+    {
+      id:'tang', name:'唐', method:'煎茶', years:'618—907',
+      svg:`<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 28h24l-2 10H22z"/><path d="M16 28h32"/><path d="M25 38v11M39 38v11"/><path d="M27 28c1-6 9-6 10 0"/><path d="M30 12c2 2 2 5 0 7M36 10c2 2 2 5 0 7"/></svg>`,
+      text:'唐人喝的是"煎茶"：把饼茶炙烤、碾成末、过罗，水初沸时加盐，二沸投茶末，三沸而止，舀进碗里连末一起喝下。陆羽在《茶经》里把这套流程连同二十四件器具一起定了下来，茶从此有了"法"。',
+      points:[
+        '陆羽《茶经》约成书于公元 780 年，是世界第一部茶学专著',
+        '茶末与汤同饮，加盐调味，讲究"沫饽"',
+        '煮茶用鍑，饮茶用碗，一整套二十四器'
+      ]
+    },
+    {
+      id:'song', name:'宋', method:'点茶', years:'960—1279',
+      svg:`<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 30h34c0 11-7 17-17 17s-17-6-17-17z"/><path d="M17 30c4 4 26 4 30 0"/><path d="M30 15c1 2 1 3 0 5M36 13c1 2 1 3 0 5"/><path d="M22 25c4-3 16-3 20 0"/></svg>`,
+      text:'宋人不再煮茶末，而是"点"：茶粉置盏中，先注少许沸水调成膏，再用竹筅反复击拂，分七次注水，直到汤花乳白、紧贴盏壁不散。斗茶成风，建盏因黑釉衬得汤花更白而贵。蔡襄《茶录》、赵佶《大观茶论》把这件事写成了学问。',
+      points:[
+        '先调膏、后击拂，七汤为度，汤花"咬盏"为上',
+        '斗茶三判：汤色、汤花、水痕',
+        '建盏黑釉，为的是衬出白色的沫饽'
+      ]
+    },
+    {
+      id:'ming', name:'明', method:'撮泡', years:'1368—1644',
+      svg:`<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 34c0-4 3-7 7-7h18c4 0 7 3 7 7v6c0 6-5 11-11 11H27c-6 0-11-5-11-11z"/><path d="M48 36c6 2 6 10 0 12"/><path d="M16 37c-5 3-5 8 0 11"/><path d="M30 23h4M32 18v5"/></svg>`,
+      text:'洪武二十四年（1391），朱元璋下诏"罢造龙团，惟采芽茶以进"。碾末煎点的繁复程序就此退场，抓一撮散茶放进壶里用沸水冲泡的"撮泡"成为主流。紫砂壶因供春而兴，中国人从"吃茶"变成了"喝茶"。',
+      points:[
+        '1391 年罢造龙团，散茶成为贡茶主流',
+        '撮泡法登场：壶泡、杯泡，茶叶不再磨成粉',
+        '紫砂兴起，茶器从"煮"转向"泡"'
+      ]
+    },
+    {
+      id:'qing', name:'清', method:'工夫', years:'1644—1912',
+      svg:`<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 36h28c0 9-6 14-14 14s-14-5-14-14z"/><path d="M20 36h24"/><path d="M24 28h16l-2 8H26z"/><path d="M32 18v10"/><path d="M27 18h10"/></svg>`,
+      text:'工夫茶在闽南、潮汕成熟：小壶小杯、投茶量大、沸水快冲，一壶可冲十余道。提壶绕杯叫"关公巡城"，逐滴补齐叫"韩信点兵"，三杯浓淡必须一致。与此同时，茶叶经广州十三行大量外销，"tea" 随海路西行。',
+      points:[
+        '小壶小杯、高冲低斟，喝的是每一道的变化',
+        '关公巡城、韩信点兵：分茶要匀',
+        '盖碗普及，外销开启，茶成为世界饮料'
+      ]
+    }
+  ],
+
+  /* 二 · 类：六大茶类（pos 为光谱目标位置 0-100） */
+  teas: [
+    { id:'green', name:'绿茶', pos:3, range:'0–5%', color:'#8FA84A', liquorColor:'#DCE6B8',
+      craft:'杀青 → 揉捻 → 干燥', reps:['西湖龙井','碧螺春','黄山毛峰'],
+      shape:'扁平、卷曲或挺直，色泽翠绿', liquor:'清汤绿叶，嫩绿明亮',
+      aroma:'豆香、栗香、清香', taste:'鲜爽回甘，久泡易涩',
+      brew:'80–85℃，玻璃杯或盖碗，快出汤',
+      note:'杀青用高温把酶"烫死"，氧化从第一步就被摁住了。' },
+    { id:'white', name:'白茶', pos:12, range:'5–10%', color:'#C9C2A8', liquorColor:'#F0E2BE',
+      craft:'萎凋 → 干燥（不炒不揉）', reps:['白毫银针','白牡丹','寿眉'],
+      shape:'芽毫满披，色白如银', liquor:'杏黄浅淡',
+      aroma:'毫香、花香、清甜', taste:'清甜柔和，汤感偏薄',
+      brew:'85–90℃，可泡可煮',
+      note:'不杀青、不揉捻，只让叶子慢慢失水，氧化一点点发生。' },
+    { id:'yellow', name:'黄茶', pos:22, range:'10–20%', color:'#D9C36A', liquorColor:'#F2DFA0',
+      craft:'杀青 → 闷黄 → 干燥', reps:['君山银针','蒙顶黄芽','霍山黄芽'],
+      shape:'芽叶嫩黄，白毫显露', liquor:'黄汤黄叶',
+      aroma:'甜玉米香、锅巴香', taste:'醇和少涩',
+      brew:'85℃ 左右，玻璃杯',
+      note:'闷黄是黄茶的身份证：趁热把茶捂起来，让多酚轻度氧化。' },
+    { id:'oolong', name:'青茶（乌龙）', pos:50, range:'15–70%', color:'#7BA39B', liquorColor:'#E4C078',
+      craft:'萎凋 → 做青 → 杀青 → 揉捻 → 焙火', reps:['铁观音','武夷岩茶','凤凰单丛'],
+      shape:'条索紧结，砂绿或乌褐', liquor:'金黄、橙黄',
+      aroma:'花香、果香、焙火香', taste:'醇厚，有"岩韵""音韵"',
+      brew:'95–100℃，快出汤，可冲七八道',
+      note:'半发酵的弹性最大：做青轻重、焙火高低，能做出从花香到炭火的一整条谱。' },
+    { id:'red', name:'红茶', pos:78, range:'70–90%', color:'#A8523C', liquorColor:'#C4553A',
+      craft:'萎凋 → 揉捻 → 发酵 → 干燥', reps:['正山小种','祁门红茶','金骏眉'],
+      shape:'条索乌黑油润，金毫显露', liquor:'红汤红叶',
+      aroma:'蜜香、花果香、松烟香', taste:'甜醇顺滑',
+      brew:'90–95℃，可清饮可调饮',
+      note:'茶多酚大部分氧化成茶黄素、茶红素，汤色因此红，涩感因此低。' },
+    { id:'dark', name:'黑茶', pos:94, range:'90–100%', color:'#6B4A2F', liquorColor:'#8E3B2A',
+      craft:'杀青 → 揉捻 → 渥堆 → 压制', reps:['普洱熟茶','安化黑茶','六堡茶'],
+      shape:'紧压成饼、砖、沱，或散茶乌褐', liquor:'红浓、橙红',
+      aroma:'陈香、菌花香、枣香', taste:'醇厚顺滑，耐泡',
+      brew:'100℃，先洗茶（润茶）',
+      note:'渥堆是微生物参与的"后发酵"，所以黑茶越陈越有自己的味道。' }
+  ],
+
+  /* 三 · 器：陆羽二十四器 */
+  vessels: [
+    { n:'风炉', s:'生火煮水', f:'形如古鼎的炉子，一足刻"坎上巽下离于中"，把煮茶的火候讲究刻在器上。' },
+    { n:'筥', s:'装茶饼的竹箱', f:'竹编箱笼，用来盛放茶饼，透气而不压碎。' },
+    { n:'炭挝', s:'碎炭的铁棒', f:'六棱铁棒，用来把炭敲碎，控制火力大小。' },
+    { n:'火筴', s:'夹炭的火钳', f:'夹炭入炉的钳子，避免手忙脚乱。' },
+    { n:'鍑', s:'煮茶的大锅', f:'大口锅，煮水烹茶；陆羽说鍑要"方其耳以正令，广其缘以务远"。' },
+    { n:'交床', s:'架锅的十字架', f:'十字木架，把鍑架稳，让火均匀。' },
+    { n:'夹', s:'夹茶饼炙烤', f:'小青竹削成，夹着茶饼在火上烤，去水气、激茶香。' },
+    { n:'纸囊', s:'存茶的纸袋', f:'双层剡藤纸袋，装烤好的茶，防止香气散失。' },
+    { n:'碾', s:'碾茶成末', f:'内圆外方的碾槽，配碾轮，把茶饼碾成细末。' },
+    { n:'罗合', s:'筛茶末的盒', f:'竹筛与盒合为一体，筛出粗细均匀的茶末。' },
+    { n:'则', s:'量茶的匙', f:'量茶末的匙，一"则"约为一升水的用量。' },
+    { n:'水方', s:'盛生水', f:'木桶，盛未经煮沸的生水，容量约一斗。' },
+    { n:'漉水囊', s:'滤水袋', f:'用生绢或竹囊滤水，去掉杂质与虫秽。' },
+    { n:'瓢', s:'舀水的葫芦', f:'葫芦剖成两半，用来舀水、量水。' },
+    { n:'竹筴', s:'搅汤的竹筷', f:'竹制长筷，在煮茶时搅动汤面，让沫饽均匀。' },
+    { n:'鹾簋', s:'盛盐的罐', f:'盛盐的器皿，唐煎茶要在汤中加盐调味。' },
+    { n:'熟盂', s:'盛沸水', f:'盛已经煮沸的水，用来控制投茶时的水量与温度。' },
+    { n:'碗', s:'饮茶的盏', f:'越州青瓷为上，陆羽说"青则益茶"，衬得汤色更清。' },
+    { n:'畚', s:'收具的草袋', f:'蒲草编的袋子，收纳全部茶具，便于携带。' },
+    { n:'札', s:'刷具的棕刷', f:'棕榈扎成的刷子，清洗茶具用。' },
+    { n:'涤方', s:'盛洗水', f:'盛洗涤用水的容器，与"水方"分工明确。' },
+    { n:'滓方', s:'盛茶渣', f:'盛茶渣与废水的容器，保持茶席整洁。' },
+    { n:'巾', s:'擦器的布', f:'粗布两块，轮流擦拭器具，保持干燥。' },
+    { n:'具列', s:'陈列茶具的架', f:'木制或竹制的床架，把二十四器一一陈列出来。' }
+  ],
+
+  /* 五 · 味：风味词 */
+  flavors: [
+    { n:'毫香', d:'白茶芽头上的白毫带来的干燥植物香，接近晒干的稻谷与干草，是白毫银针的招牌。' },
+    { n:'豆香', d:'绿茶杀青后常见的香气，像刚磨开的豆浆或炒青豆，多见于龙井、碧螺春。' },
+    { n:'栗香', d:'类似炒板栗的甜香，常出现在炒青绿茶中，温度越高越明显。' },
+    { n:'花香', d:'从兰花香到栀子香都算，乌龙茶做青得当就会出花香，单丛的香型尤其多。' },
+    { n:'果香', d:'熟果、蜜桃、桂圆一类的甜香，多见于发酵较重的乌龙与部分红茶。' },
+    { n:'蜜香', d:'像蜂蜜一样的甜香，红茶的典型香气，来自发酵中糖类与氨基酸的反应。' },
+    { n:'焙火香', d:'炭焙留下的火功香，像烤面包边或焦糖，武夷岩茶、焙火乌龙常有。' },
+    { n:'松烟香', d:'松柴熏焙的气味，正山小种的标志；传统工艺用松烟熏焙，现在也有无烟版本。' },
+    { n:'陈香', d:'存放多年后产生的沉稳香气，接近老木头与干枣，黑茶与老白茶常见。' },
+    { n:'菌花香', d:'茯砖茶"发花"后特有的香气，来自冠突散囊菌，像淡淡的菌菇与干果。' },
+    { n:'枣香', d:'像干红枣的甜香，常见于陈年黑茶与煮饮的老白茶。' },
+    { n:'水味', d:'茶汤淡薄、只剩水的感觉，通常由投茶太少、泡得太久或茶叶本身寡淡造成。' }
+  ],
+
+  /* 六 · 礼：五地茶俗 */
+  rituals: [
+    { id:'gongfu', name:'潮汕工夫茶', where:'广东潮州 · 汕头',
+      intro:'小壶小杯，三杯一壶，茶汤浓强。所谓"工夫"，不是费时间，是把工夫花在每一个细节上。',
+      steps:[
+        ['治器','沸水烫壶烫杯，把器具温透'],
+        ['纳茶','壶底放粗叶、中段放细叶、壶面再放粗叶'],
+        ['候汤','水初沸、"蟹眼"刚起时最宜'],
+        ['冲点','高冲低斟，刮沫、淋罐'],
+        ['洒茶','关公巡城、韩信点兵，三杯浓淡一致']
+      ],
+      quiz:{ q:'"关公巡城"这一步，真正的作用是什么？', o:['让三杯茶浓淡一致','让茶汤更香','表示对客人的尊敬'], a:0,
+        fb:'提壶绕三杯巡回斟注，是为了让先倒与后倒的浓度接近；最后几滴逐杯点入叫"韩信点兵"，补齐每一杯。' } },
+    { id:'sanda', name:'白族三道茶', where:'云南大理 · 白族',
+      intro:'一苦、二甜、三回味。先烤出焦香的苦茶，再冲甜，最后用花椒、桂皮、姜收尾。',
+      steps:[
+        ['烤茶','砂罐干烤，直到茶香爆出'],
+        ['苦茶','沸水冲入，色如琥珀，入口苦'],
+        ['甜茶','加红糖、核桃仁、乳扇'],
+        ['回味茶','加花椒、桂皮、姜，甜中带麻']
+      ],
+      quiz:{ q:'三道茶的正确顺序是？', o:['苦、甜、回味','甜、苦、回味','回味、苦、甜'], a:0,
+        fb:'"先苦后甜，回味悠长"既是茶的味道，也是白族待客的祝愿意：人生先吃苦，后享甜，最后留一点回味。' } },
+    { id:'suyou', name:'藏族酥油茶', where:'西藏 · 青海 · 四川藏区',
+      intro:'高原上的茶不是清饮：砖茶熬浓，加酥油与盐，在茶桶里反复搅打，打成乳浊的暖身饮料。',
+      steps:[
+        ['熬茶','掰碎砖茶，入壶久熬成浓汁'],
+        ['配料','滤入茶桶，加酥油与盐'],
+        ['打茶','上下搅打数十次，使油水乳化'],
+        ['敬茶','倒入茶碗，双手递客'],
+        ['续茶','客人饮尽，主人随即续满']
+      ],
+      quiz:{ q:'酥油茶里一定要放盐，最根本的原因是？', o:['高原饮食需要补充盐分与热量','为了防腐','为了让颜色好看'], a:0,
+        fb:'高寒地区蔬果稀少，砖茶配酥油与盐，既补充热量也补充矿物质，是长期适应环境形成的饮食智慧。' } },
+    { id:'naicha', name:'蒙古咸奶茶', where:'内蒙古草原',
+      intro:'砖茶熬煮，兑鲜奶加盐，配炒米、奶豆腐、奶皮子，是待客的第一道礼。',
+      steps:[
+        ['碎茶','砖茶捣碎，铁锅干炒出香'],
+        ['熬煮','加水久熬，滤去茶渣'],
+        ['兑奶','兑入鲜奶，加盐，保持微沸'],
+        ['奉茶','盛碗，配炒米、奶豆腐']
+      ],
+      quiz:{ q:'蒙古族敬茶，通常先敬谁？', o:['长者','孩子','客人中的男性'], a:0,
+        fb:'先长后幼、先客后主，是草原待客的基本次序；接碗用双手，第一碗常先敬长者或最尊贵的客人。' } },
+    { id:'leicha', name:'客家擂茶', where:'福建 · 江西 · 广东客家地区',
+      intro:'茶叶、花生、芝麻、姜一起在擂钵里捣成糊，冲入沸水，咸香厚实，可以当饭。',
+      steps:[
+        ['备料','茶叶、花生、芝麻、姜入擂钵'],
+        ['擂制','用擂棍顺时针捣成细糊'],
+        ['冲汤','冲入沸水，调匀'],
+        ['配食','配米香、炒菜，作"茶饭"']
+      ],
+      quiz:{ q:'擂茶为什么常被当作"饭"？', o:['原料含粮食与油脂，能顶饱','因为一定要配米饭','因为只在饭点喝'], a:0,
+        fb:'客家人迁徙途中，以擂茶配米香充饥，茶叶、花生、芝麻提供油脂与热量，它既是茶，也是一顿简餐。' } }
+  ],
+
+  /* 六 · 礼：六首茶诗 */
+  poems: [
+    { title:'走笔谢孟谏议寄新茶', author:'唐 · 卢仝', lines:['一碗喉吻润，','两碗破孤闷。','三碗搜枯肠，','唯有文字五千卷。','七碗吃不得也，','唯觉两腋习习清风生。'],
+      note:'<b>七碗茶歌。</b>从"润喉"一路写到"清风生"，把饮茶的生理感受推成了羽化登仙。后世说"七碗"、说"两腋生风"，都出自这里。' },
+    { title:'饮茶歌诮崔石使君', author:'唐 · 皎然', lines:['一饮涤昏寐，','情思爽朗满天地；','再饮清我神，','忽如飞雨洒轻尘；','三饮便得道，','何须苦心破烦恼。'],
+      note:'<b>以茶入道。</b>僧人皎然比卢仝更早把茶抬到"得道"的高度。三饮层层递进：醒神、清心、破烦恼。' },
+    { title:'次韵曹辅寄壑源试焙新芽', author:'宋 · 苏轼', lines:['要知玉雪心肠好，','不是膏油首面新。','戏作小诗君一笑，','从来佳茗似佳人。'],
+      note:'<b>从来佳茗似佳人。</b>苏轼评茶不只看外表"膏油首面"的光鲜，而看"玉雪心肠"——内质。这句后来成了茶史上最著名的比喻。' },
+    { title:'寒夜', author:'宋 · 杜耒', lines:['寒夜客来茶当酒，','竹炉汤沸火初红。','寻常一样窗前月，','才有梅花便不同。'],
+      note:'<b>茶当酒。</b>寒夜无酒，以茶待客，竹炉火红、汤沸有声。最后一句忽然转到梅花：同样的月亮，因为一树梅花而不一样了。' },
+    { title:'临安春雨初霁', author:'宋 · 陆游', lines:['矮纸斜行闲作草，','晴窗细乳戏分茶。'],
+      note:'<b>分茶。</b>"细乳"是点茶击拂出的白色沫饽，"分茶"是在汤花上作画的游戏。这两句写尽了宋人春日里无事可做的闲。' },
+    { title:'茶', author:'唐 · 元稹', lines:['茶。','香叶，嫩芽。','慕诗客，爱僧家。','碾雕白玉，罗织红纱。','铫煎黄蕊色，碗转曲尘花。','夜后邀陪明月，晨前命对朝霞。','洗尽古今人不倦，将知醉后岂堪夸。'],
+      note:'<b>宝塔诗。</b>从一字起，逐句加两字，像塔一样堆上去。短短几行，把茶的形、器、色、时、功全写完了。' }
+  ],
+
+  /* 五 · 味：盲品八题 */
+  blind: [
+    { clues:['干茶扁平挺直，糙米色','汤色嫩绿明亮','豆香明显，入口鲜爽'], a:'绿茶',
+      e:'扁平是炒制压出来的，糙米色与豆香是龙井的招牌。绿茶不发酵，汤色才这么绿。' },
+    { clues:['芽头肥壮，满披白毫','汤色浅杏黄，接近无色','毫香清甜，汤感偏薄'], a:'白茶',
+      e:'满披白毫、不炒不揉，只有萎凋与干燥，所以汤色浅、味道清甜，这是白毫银针的典型。' },
+    { clues:['条索紧结，色泽砂绿','汤色金黄','兰花香高锐，七泡仍有余香'], a:'青茶（乌龙）',
+      e:'砂绿、金黄、兰花香、耐泡，四个特征指向闽南乌龙；"七泡有余香"是铁观音的老话。' },
+    { clues:['条索乌黑油润，带金毫','汤色红艳明亮','蜜香浓，入口甜醇'], a:'红茶',
+      e:'全发酵让茶多酚变成茶黄素与茶红素，汤色红、涩感低、甜度上来，蜜香是红茶的共同语言。' },
+    { clues:['紧压成饼，乌褐','汤色红浓','陈香沉稳，入口顺滑'], a:'黑茶',
+      e:'紧压与渥堆是黑茶的两张名片，陈香来自后期转化，汤色比红茶更深更浓。' },
+    { clues:['芽叶嫩黄，白毫显露','黄汤黄叶','甜玉米香，几乎不涩'], a:'黄茶',
+      e:'"黄汤黄叶"是闷黄的直接结果：趁热捂茶，多酚轻度氧化，涩感下降，出来一股甜玉米香。' },
+    { clues:['干茶乌褐油润，焙火香重','汤色橙黄','入口有"岩韵"，回甘长'], a:'青茶（乌龙）',
+      e:'焙火香与岩韵是武夷岩茶的标志，属闽北乌龙。汤色橙黄而非红艳，说明发酵没有走到红茶那一步。' },
+    { clues:['干茶卷曲成螺，满身披毫','汤色浅黄清澈','清香带栗，鲜爽微涩'], a:'绿茶',
+      e:'卷曲成螺、白毫显露是碧螺春的外形；不发酵的绿茶保留了大量茶多酚，所以鲜爽里总带一点涩。' }
+  ],
+
+  /* 四 · 艺：斗茶三局 */
+  doucha: [
+    { a:{ color:'鲜白', foam:'细腻，紧贴盏壁', mark:'久不退' },
+      b:{ color:'青白', foam:'粗疏，易散', mark:'先退' },
+      win:'a',
+      why:'汤色以鲜白为上，青白次之；一方汤花细腻咬盏、水痕久不退，另一方先露水线——三项全在 A。' },
+    { a:{ color:'黄白', foam:'粗疏', mark:'先退' },
+      b:{ color:'青白', foam:'细腻，咬盏', mark:'稍后退' },
+      win:'b',
+      why:'《茶录》以白为上、青白次之、黄白又次。B 的汤色高一级，汤花也更细，水痕退得晚，三项都赢。' },
+    { a:{ color:'鲜白', foam:'细腻', mark:'先退' },
+      b:{ color:'鲜白', foam:'稍粗', mark:'久不退' },
+      win:'b',
+      why:'这一局最见分晓：汤色打平，A 的汤花更细，但水痕先退。斗茶以"水痕先退者为负"，所以 B 胜——持久比漂亮更重要。' }
+  ],
+
+  /* 考：四十题 */
+  quiz: [
+    { l:1, t:'茶史', q:'《茶经》的作者是谁？', o:['陆羽','蔡襄','赵佶','卢仝'], a:0,
+      e:'唐代陆羽所著《茶经》约成书于公元 780 年前后，系统总结了种茶、制茶、煮茶与品饮，陆羽因此被尊为"茶圣"。' },
+    { l:1, t:'茶类', q:'六大茶类中，属于"后发酵"的是？', o:['白茶','青茶','黑茶','黄茶'], a:2,
+      e:'黑茶的渥堆工序有微生物参与，属于后发酵；普洱熟茶、安化黑茶、六堡茶都走这条路，因此可以长期存放。' },
+    { l:1, t:'茶器', q:'宋代点茶时用来击拂茶汤的工具是？', o:['茶匙','竹筅','茶碾','罗合'], a:1,
+      e:'茶筅用竹丝劈成，快速击拂使汤花乳白细腻；日本抹茶的茶筅即源于宋代点茶，形制一路传了过去。' },
+    { l:1, t:'茶史', q:'系统记载斗茶评判标准的是哪部书？', o:['《茶经》','《茶录》','《大观茶论》','《茶疏》'], a:1,
+      e:'北宋蔡襄《茶录》明确"视其面色鲜白、著盏无水痕为绝佳"，并定下水痕先退者负的规则，是斗茶最直接的依据。' },
+    { l:1, t:'茶史', q:'下诏"罢造龙团，惟采芽茶以进"的是哪位皇帝？', o:['宋徽宗','明太祖','清康熙','唐玄宗'], a:1,
+      e:'洪武二十四年（1391），朱元璋下诏罢造福建建宁的龙团凤饼，改贡散茶。碾末煎点的繁复程序从此退场，撮泡法流行。' },
+    { l:1, t:'茶器', q:'《茶经·四之器》一共列了多少件茶器？', o:['十二件','十八件','二十四件','三十六件'], a:2,
+      e:'陆羽为煎茶配置了从风炉、鍑到巾、具列的二十四件器具，是一套完整的唐代茶事装备清单。' },
+    { l:1, t:'茶器', q:'宋代建盏的主要产地是？', o:['浙江龙泉','福建建阳','江西景德镇','河南汝州'], a:1,
+      e:'建盏产于福建建阳水吉一带，黑釉含铁量高，烧成时析出兔毫、油滴等纹样，因能衬得汤花更白而受宋人推崇。' },
+    { l:1, t:'民俗', q:'潮汕工夫茶里的"关公巡城"指的是？', o:['依次绕圈斟茶，使各杯浓淡一致','用沸水淋壶','把茶壶举高冲水','向客人敬第一杯'], a:0,
+      e:'洒茶时提壶绕三杯巡回斟注，称关公巡城；最后几滴逐杯点入，称韩信点兵，目的都是让三杯浓度接近。' },
+    { l:1, t:'茶类', q:'白茶的主要工艺是？', o:['杀青与揉捻','萎凋与干燥','渥堆与压制','做青与焙火'], a:1,
+      e:'白茶不炒不揉，只经萎凋与干燥，让叶子缓慢失水、轻微氧化，因此毫香清甜、汤色浅淡，是工艺最简单的茶类。' },
+    { l:1, t:'茶类', q:'黄茶区别于其他茶类的关键工艺是？', o:['闷黄','渥堆','做青','焙火'], a:0,
+      e:'闷黄是在杀青或揉捻后趁热把茶叶捂起来，让多酚轻度氧化，形成黄汤黄叶与甜玉米香，这是黄茶的身份证。' },
+    { l:1, t:'茶史', q:'英语 "tea" 的读音，最可能来自哪种汉语方言？', o:['闽南语','粤语','吴语','官话'], a:0,
+      e:'茶叶经海路外销，荷兰人借闽南语"tê"的音，英语作 tea；经陆路传播的语言则多用 cha 系读音。' },
+    { l:1, t:'民俗', q:'藏族酥油茶的主要原料是？', o:['绿茶、冰糖、菊花','砖茶、酥油、盐','红茶、牛奶、糖','乌龙、蜂蜜、姜'], a:1,
+      e:'酥油茶以砖茶熬汁，加酥油与盐在茶桶中反复搅打成乳浊液；高寒地区用它补充热量与盐分。' },
+
+    { l:2, t:'茶类', q:'干茶扁平光滑、糙米色，汤色嫩绿明亮，豆香明显。最可能是？', o:['西湖龙井','白毫银针','祁门红茶','普洱熟茶'], a:0,
+      e:'龙井以"扁、平、滑、直"著称，炒制时压扁成形；糙米色与豆香是它的典型标志，汤色则是绿茶特有的嫩绿。' },
+    { l:2, t:'茶类', q:'汤色橙黄、叶底呈"绿叶红镶边"，属于哪一类茶？', o:['绿茶','乌龙茶','红茶','黑茶'], a:1,
+      e:'乌龙茶做青时叶缘细胞破损先氧化，形成红边，叶心仍绿；冲泡后叶底"绿叶红镶边"是半发酵最直观的证据。' },
+    { l:2, t:'茶类', q:'汤色红浓、陈香明显、紧压成饼。最可能是？', o:['白牡丹','正山小种','普洱熟茶','君山银针'], a:2,
+      e:'熟普经渥堆后发酵，常压成饼、砖、沱；汤色红浓，带陈香与枣香，入口顺滑，与红茶的红艳明亮不同。' },
+    { l:2, t:'茶类', q:'芽头肥壮、满披白毫、汤色杏黄。这是？', o:['白毫银针','西湖龙井','铁观音','六堡茶'], a:0,
+      e:'白毫银针全用肥壮芽头，满披白毫，汤色浅杏黄，毫香清甜，是白茶中等级最高的品类之一。' },
+    { l:2, t:'茶类', q:'条索乌黑油润、带金毫，汤色红艳，蜜香浓。这是？', o:['绿茶','白茶','红茶','黄茶'], a:2,
+      e:'红茶全发酵，茶多酚氧化成茶黄素与茶红素，汤色红艳、叶底红亮，蜜香与甜醇是共同特征。' },
+    { l:2, t:'茶类', q:'汤色黄亮、叶底嫩黄、带甜玉米香。这是？', o:['黄茶','青茶','红茶','黑茶'], a:0,
+      e:'黄茶的"黄"来自闷黄工艺，汤色与叶底都偏黄，香气常带甜玉米或锅巴气息，涩感比绿茶低。' },
+    { l:2, t:'茶类', q:'香气高锐带兰花香、七泡有余香。最可能是？', o:['碧螺春','铁观音','寿眉','祁门红茶'], a:1,
+      e:'铁观音属闽南乌龙，做青与包揉形成"观音韵"；优质茶兰花香明显、耐泡度高，"七泡有余香"正是老话。' },
+    { l:2, t:'茶史', q:'"汤面沫饽洁白、紧贴盏壁久不散"描述的是？', o:['唐代煎茶的沫饽','宋代点茶的上品','明代撮泡的茶沫','清代工夫茶的茶汤'], a:1,
+      e:'宋人点茶以汤花乳白、细腻、紧贴盏壁久不散为佳，称为"咬盏"，是点茶与斗茶最核心的评判标准。' },
+
+    { l:3, t:'冲泡', q:'你用刚烧开的沸水直冲明前龙井，最可能出现什么？', o:['香气更高扬','鲜爽尽失，苦涩突出','汤色更清亮','耐泡度提升'], a:1,
+      e:'绿茶芽叶细嫩，沸水会迅速浸出过多茶多酚与咖啡碱，鲜爽的氨基酸反被掩盖；80–85℃ 更能保住鲜甜。' },
+    { l:3, t:'冲泡', q:'想让绿茶在玻璃杯里好看又鲜爽，第一步应该？', o:['先放茶叶再猛冲沸水','温杯后沿杯壁注入 80℃ 水','加盖闷三分钟','用茶匙反复搅拌'], a:1,
+      e:'温杯避免降温过快，沿壁注水减少对茶叶的冲击，叶片舒展均匀，汤色与口感都更稳定。' },
+    { l:3, t:'民俗', q:'潮汕工夫茶常只摆三只杯，最合理的解释是？', o:['杯子不够','传统"三杯一壶"的待客格局','三杯刚好一人一杯','为了省茶叶'], a:1,
+      e:'三杯一壶是工夫茶的经典配置，便于巡回分茶，也暗合"三口为品"的讲究；人多时再添杯，但分茶手法不变。' },
+    { l:3, t:'民俗', q:'白族三道茶的正确顺序是？', o:['苦、甜、回味','甜、苦、回味','回味、苦、甜','苦、回味、甜'], a:0,
+      e:'三道茶先烤苦茶，再调甜茶，最后以花椒、桂皮、姜做回味茶，寓意先苦后甜、回味悠长。' },
+    { l:3, t:'民俗', q:'蒙古族主人敬茶，你接碗时应该？', o:['单手接过，先喝一口','双手接，先敬长者','放在桌上等主人倒','先闻香再还给主人'], a:1,
+      e:'草原待客先长后幼、先客后主，接碗用双手；有的地方喝前还会先敬天、敬地，是基本的礼节。' },
+    { l:3, t:'冲泡', q:'冲泡紧压黑茶，第一道水通常怎么处理？', o:['直接喝，最浓最香','快速润茶后倒掉','用来温杯','留到最后再喝'], a:1,
+      e:'黑茶多为紧压茶，第一道沸水快速润茶可洗去浮尘、唤醒茶块；随后几道才是正味，且越泡越顺。' },
+    { l:3, t:'冲泡', q:'觉得红茶泡出来偏涩，想让它更甜一些，应该？', o:['提高水温并延长浸泡','略降水温或缩短时间','加大投茶量','换成沸水猛冲'], a:1,
+      e:'红茶发酵充分，高温久泡会把涩感泡出来；适当降温或快出汤，能让甜醇更突出、涩感收敛。' },
+    { l:3, t:'冲泡', q:'红茶茶汤放凉后变浑浊，这种现象叫？', o:['冷后浑','返青','走味','起霜'], a:0,
+      e:'茶黄素与咖啡碱在低温下络合析出，形成冷后浑；这是红茶内含物丰富的表现，加热后通常可以恢复清亮。' },
+    { l:3, t:'冲泡', q:'用盖碗泡乌龙，出汤后应该？', o:['留一点汤在碗里','沥尽，不留汤底','马上加冷水','盖紧闷住'], a:1,
+      e:'留汤会让茶叶持续浸泡，下一道容易闷苦；沥尽才能保证每道浓淡可控，也更能喝出层次变化。' },
+    { l:3, t:'茶器', q:'紫砂壶讲究"一壶一茶"，主要原因是？', o:['壶会褪色','双气孔结构吸附香气，避免串味','一把壶只能泡一种茶型','为了好看'], a:1,
+      e:'紫砂胎体有双气孔，长期泡一种茶会养出对应的香气；混泡则互相干扰，所以老茶客一壶只侍一茶。' },
+    { l:3, t:'茶史', q:'宋代斗茶里的"水痕"指的是？', o:['茶汤表面的泡沫','汤花退去后盏壁留下的水线','盏底的茶渣','煮水时的水汽'], a:1,
+      e:'斗茶看汤花能"咬"住盏壁多久，先露出水线的一方为负；水痕是判负的关键依据，比汤色更见功夫。' },
+    { l:3, t:'民俗', q:'在茶馆点一泡"工夫茶"，你通常会得到？', o:['一大壶茶，配杯子自倒','小壶小杯、多次冲泡的浓茶','一杯现成的奶茶','一包茶叶带走'], a:1,
+      e:'工夫茶重在"工夫"：器小、汤浓、冲泡频繁，一壶可冲十余道，喝的是每一道之间的变化。' },
+
+    { l:4, t:'茶类', q:'干茶乌褐油润、汤色橙黄、叶底有红边、焙火香重。最可能是？', o:['武夷岩茶','祁门红茶','普洱熟茶','霍山黄芽'], a:0,
+      e:'焙火香与"岩韵"是武夷岩茶的标志，属闽北乌龙；叶底红边说明做青到位，汤色橙黄而非红艳，说明没走到全发酵。' },
+    { l:4, t:'工艺', q:'同一批鲜叶，A 做成清香浅黄，B 做成蜜香橙红。最可能的差别是？', o:['树种不同','发酵与焙火程度不同','采摘季节不同','产地不同'], a:1,
+      e:'同一片叶子可做绿茶也可做红茶，差别在工艺：发酵越重，汤色越深、香气越偏蜜甜。茶类由工艺决定，不由树种决定。' },
+    { l:4, t:'茶史', q:'明代文献中出现"撮泡"一词，说明当时？', o:['点茶仍然盛行','散茶冲泡已经流行','茶只用于药用','茶饼仍是主流'], a:1,
+      e:'撮泡即抓一把散茶入杯冲泡，取代碾末煎点；这与洪武罢造龙团、改贡散茶的政策直接相关，饮茶方式由此转向。' },
+    { l:4, t:'茶史', q:'唐代煎茶要在汤中加盐，这说明？', o:['当时茶是咸的调味饮料','盐能保鲜','茶太苦必须加盐','盐是奢侈品'], a:0,
+      e:'陆羽煎茶在"三沸"中加盐调味，茶汤偏咸鲜，与今天清饮的习惯差别很大；饮茶方式随时代不断变化。' },
+    { l:4, t:'工艺', q:'建盏黑釉上的"兔毫"纹是怎么来的？', o:['人工描绘','烧成时釉中铁析晶','使用中磨损','窑灰落在釉面'], a:1,
+      e:'建盏釉含铁量高，高温下铁氧化物析出结晶，沿釉面流动形成兔毫、油滴等窑变纹样，每一只都不完全相同。' },
+    { l:4, t:'工艺', q:'同一株茶树，能做出绿茶也能做出红茶吗？', o:['能，工艺不同而已','不能，树种不同','只能做一种','要看树龄'], a:0,
+      e:'茶类由工艺决定而非树种：杀青不发酵是绿茶，充分发酵是红茶。同一片鲜叶，两条路都走得通，这是茶学的基本常识。' },
+    { l:4, t:'茶类', q:'高山茶通常更耐泡，主要原因是？', o:['海拔高、气压低','生长慢，内含物积累更充分','叶片更厚，不易碎','施肥更多'], a:1,
+      e:'高海拔温差大、生长周期长，芽叶积累的氨基酸与糖类更多，滋味更厚、耐泡度通常更高；但并非绝对，工艺同样关键。' },
+    { l:4, t:'茶类', q:'一款茶标注"三年陈"，最可能是哪类茶？', o:['绿茶或清香型乌龙','白茶或黑茶','黄茶或红茶','所有茶都可以'], a:1,
+      e:'白茶与黑茶都有陈放传统，工艺允许后期转化；绿茶、清香型乌龙讲究新鲜，久放反而失香，陈放不是通则。' }
+  ]
+};
+
+/* =========================================================
+   ENGLISH CONTENT —— 与中文结构一一对应
+   ========================================================= */
+const DATA_EN = {
+  titles: [
+    { name: 'Tea Guest', min: 0 },
+    { name: 'Tea Novice', min: 8 },
+    { name: 'Tea Adept', min: 20 },
+    { name: 'Tea Master', min: 32 },
+    { name: 'Tea Erudite', min: 36 }
+  ],
+
+  eras: [
+    {
+      id: 'tang', name: 'Tang', method: 'Boiled tea', years: '618—907',
+      svg: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 28h24l-2 10H22z"/><path d="M16 28h32"/><path d="M25 38v11M39 38v11"/><path d="M27 28c1-6 9-6 10 0"/><path d="M30 12c2 2 2 5 0 7M36 10c2 2 2 5 0 7"/></svg>`,
+      text: 'In the Tang, tea was boiled. Cake tea was toasted, ground to powder and sifted; salt went in at the first boil, the powder at the second, and the brew was ladled into bowls at the third, powder and all. Lu Yu set the method down in The Classic of Tea around 780, together with twenty-four utensils. From then on, tea had a canon.',
+      points: [
+        'The Classic of Tea, by Lu Yu, c. 780 — the first treatise on tea anywhere',
+        'Powder drunk with the liquor, seasoned with salt, prized for its foam',
+        'A cauldron to boil and a bowl to drink — twenty-four pieces in all'
+      ]
+    },
+    {
+      id: 'song', name: 'Song', method: 'Whisked tea', years: '960—1279',
+      svg: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 30h34c0 11-7 17-17 17s-17-6-17-17z"/><path d="M17 30c4 4 26 4 30 0"/><path d="M30 15c1 2 1 3 0 5M36 13c1 2 1 3 0 5"/><path d="M22 25c4-3 16-3 20 0"/></svg>`,
+      text: 'The Song stopped boiling the powder and began to whisk it. Powder went into a warmed bowl, a little hot water was worked in to make a paste, then a bamboo whisk beat it while water was added seven times, until the foam turned creamy white and clung to the bowl. Tea contests became a pastime, and dark Jian bowls were prized for setting off the white. Cai Xiang’s Record of Tea and Emperor Huizong’s Treatise on Tea turned it into a science.',
+      points: [
+        'Paste first, then whisk; seven infusions; clinging foam is the mark of quality',
+        'Contests judged three things: colour, foam and water line',
+        'Dark Jian glaze existed to show up the white foam'
+      ]
+    },
+    {
+      id: 'ming', name: 'Ming', method: 'Steeped tea', years: '1368—1644',
+      svg: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 34c0-4 3-7 7-7h18c4 0 7 3 7 7v6c0 6-5 11-11 11H27c-6 0-11-5-11-11z"/><path d="M48 36c6 2 6 10 0 12"/><path d="M16 37c-5 3-5 8 0 11"/><path d="M30 23h4M32 18v5"/></svg>`,
+      text: 'In 1391 the Hongwu Emperor ordered the pressed dragon-and-phoenix cakes abolished and loose leaf sent instead. The laborious grind-and-whisk ritual faded; throwing a pinch of leaf into a pot and pouring boiling water became the norm. Yixing clay pots rose with Gongchun, and the Chinese moved from eating tea to drinking it.',
+      points: [
+        '1391: pressed cakes abandoned, loose leaf becomes tribute tea',
+        'Steeping arrives — pots and cups, no more powder',
+        'Yixing clay rises; vessels shift from boiling to brewing'
+      ]
+    },
+    {
+      id: 'qing', name: 'Qing', method: 'Gongfu tea', years: '1644—1912',
+      svg: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 36h28c0 9-6 14-14 14s-14-5-14-14z"/><path d="M20 36h24"/><path d="M24 28h16l-2 8H26z"/><path d="M32 18v10"/><path d="M27 18h10"/></svg>`,
+      text: 'Gongfu tea matured in southern Fujian and Chaozhou: a small pot, tiny cups, a heavy charge of leaf and quick pours, a dozen infusions from one pot. Carrying the pot round the cups is called “Lord Guan patrols the city”; the last drops are “Han Xin counts his troops”. All three cups must be equally strong. Meanwhile tea left in bulk through Canton, and “tea” travelled west by sea.',
+      points: [
+        'Small pot, tiny cups, many infusions — the pleasure is in the change',
+        'Patrol the city, count the troops: every cup equal',
+        'Lidded bowls spread, export begins, tea becomes a world drink'
+      ]
+    }
+  ],
+
+  teas: [
+    { id: 'green', name: 'Green tea', pos: 3, range: '0–5%', color: '#8FA84A', liquorColor: '#DCE6B8',
+      craft: 'Fixation (pan-fire, bake or steam) → rolling → drying', reps: ['Longjing', 'Biluochun', 'Huangshan Maofeng'],
+      shape: 'Flat, curled or straight; vivid green', liquor: 'Clear, pale green',
+      aroma: 'Bean, chestnut, fresh-cut grass', taste: 'Fresh and sweet, bitter if steeped long',
+      brew: '80–85 °C, glass or lidded bowl, short steeps',
+      note: 'Fixation heats the leaf enough to kill its enzymes, so oxidation is stopped at the very first step.' },
+    { id: 'white', name: 'White tea', pos: 12, range: '5–10%', color: '#C9C2A8', liquorColor: '#F0E2BE',
+      craft: 'Withering → drying (no pan-fire, no rolling)', reps: ['Silver Needle', 'White Peony', 'Shou Mei'],
+      shape: 'Downy buds, silver-white', liquor: 'Pale apricot',
+      aroma: 'Downy, floral, delicate sweetness', taste: 'Light and sweet, thin body',
+      brew: '85–90 °C; can also be simmered',
+      note: 'No fixation and no rolling: the leaf simply dries, and oxidation happens a little at a time.' },
+    { id: 'yellow', name: 'Yellow tea', pos: 22, range: '10–20%', color: '#D9C36A', liquorColor: '#F2DFA0',
+      craft: 'Fixation → sealed yellowing (menhuang) → drying', reps: ['Junshan Silver Needle', 'Mengding Yellow Bud', 'Huoshan Yellow Bud'],
+      shape: 'Tender yellow buds with down', liquor: 'Yellow liquor, yellow leaf',
+      aroma: 'Sweet corn, toasted rice', taste: 'Mellow, low astringency',
+      brew: 'About 85 °C, glass',
+      note: 'Sealing the warm leaf is the signature step: a gentle oxidation that turns both leaf and liquor yellow.' },
+    { id: 'oolong', name: 'Oolong', pos: 50, range: '15–70%', color: '#7BA39B', liquorColor: '#E4C078',
+      craft: 'Withering → shaking (zuoqing) → fixation → rolling → roasting', reps: ['Tieguanyin', 'Wuyi Rock Tea', 'Phoenix Dan Cong'],
+      shape: 'Tight twisted leaf, olive-green to dark brown', liquor: 'Golden to amber',
+      aroma: 'Orchid, ripe fruit, roast', taste: 'Full-bodied, with rock rhyme and Guanyin rhyme',
+      brew: '95–100 °C, quick pours, six to eight infusions',
+      note: 'Half-oxidised leaf has the widest range: light shaking and low roast give flowers, heavy roast gives charcoal.' },
+    { id: 'red', name: 'Black tea', pos: 78, range: '70–90%', color: '#A8523C', liquorColor: '#C4553A',
+      craft: 'Withering → rolling → fermentation → drying', reps: ['Lapsang Souchong', 'Keemun', 'Jin Jun Mei'],
+      shape: 'Dark, glossy leaf with golden tips', liquor: 'Bright red',
+      aroma: 'Honey, fruit, pine smoke', taste: 'Sweet and smooth',
+      brew: '90–95 °C; plain or with milk',
+      note: 'Most polyphenols oxidise into theaflavins and thearubigins: the liquor turns red and the astringency drops.' },
+    { id: 'dark', name: 'Dark tea', pos: 94, range: '90–100%', color: '#6B4A2F', liquorColor: '#8E3B2A',
+      craft: 'Fixation → rolling → pile fermentation → pressing', reps: ['Ripe Pu-erh', 'Anhua dark tea', 'Liubao'],
+      shape: 'Pressed into cakes, bricks or bowls; or loose and dark', liquor: 'Deep red to orange',
+      aroma: 'Aged wood, mushroom, date', taste: 'Thick, smooth, long-lasting',
+      brew: '100 °C; rinse once first',
+      note: 'Pile fermentation is microbial — a real post-fermentation, which is why dark tea ages into a flavour of its own.' }
+  ],
+
+  vessels: [
+    { n: 'Wind stove', s: 'holds the fire', f: 'A stove shaped like an ancient tripod, one leg inscribed with the trigrams for water, wind and fire — the craft of fire written into the vessel itself.' },
+    { n: 'Bamboo hamper', s: 'holds tea cakes', f: 'A woven bamboo box for storing cakes; it breathes without crushing them.' },
+    { n: 'Charcoal poker', s: 'breaks the charcoal', f: 'A six-sided iron rod used to break charcoal to size and so control the fire.' },
+    { n: 'Fire tongs', s: 'feed the fire', f: 'Tongs for carrying charcoal into the stove without burning your hands.' },
+    { n: 'Cauldron', s: 'boils the tea', f: 'A wide-mouthed cauldron for water and tea; Lu Yu asked for square handles and a broad rim.' },
+    { n: 'Cross stand', s: 'steadies the cauldron', f: 'A cross-shaped wooden stand that holds the cauldron level over the fire.' },
+    { n: 'Tea tongs', s: 'toast the cakes', f: 'Split bamboo for holding a cake over the fire, driving off damp and waking the aroma.' },
+    { n: 'Paper pouch', s: 'stores the toasted tea', f: 'A double layer of fine paper that keeps the toasted tea dry and its scent in.' },
+    { n: 'Roller', s: 'grinds the cake', f: 'A round trough with a stone wheel that grinds the cake into fine powder.' },
+    { n: 'Sieve box', s: 'sifts the powder', f: 'A bamboo sieve set into a box, producing an even powder.' },
+    { n: 'Measuring spoon', s: 'measures the powder', f: 'A spoon that measures one portion of powder — roughly the dose for a litre of water.' },
+    { n: 'Water jar', s: 'holds raw water', f: 'A wooden pail for unboiled water.' },
+    { n: 'Water filter', s: 'strains the water', f: 'A silk or bamboo bag that filters grit and insects from the water.' },
+    { n: 'Gourd ladle', s: 'lifts the water', f: 'A gourd split in two, used to scoop and measure water.' },
+    { n: 'Bamboo stirrer', s: 'stirs the brew', f: 'Long bamboo chopsticks that even out the foam as the tea boils.' },
+    { n: 'Salt vessel', s: 'holds the salt', f: 'A jar of salt: Tang boiled tea was seasoned during the boil.' },
+    { n: 'Hot-water jug', s: 'holds boiled water', f: 'A vessel of already-boiled water, to control the dose and temperature when the powder goes in.' },
+    { n: 'Tea bowl', s: 'drinks the tea', f: 'Yue celadon was judged best; Lu Yu held that blue-green sets off the colour of the liquor.' },
+    { n: 'Carrying bag', s: 'holds the whole set', f: 'A rush bag that holds all twenty-four pieces for travel.' },
+    { n: 'Brush', s: 'scrubs the vessels', f: 'A palm-fibre brush for washing the utensils.' },
+    { n: 'Wash basin', s: 'holds washing water', f: 'A container for water used to wash the vessels, kept apart from drinking water.' },
+    { n: 'Slop bowl', s: 'holds the dregs', f: 'For spent leaves and waste water, keeping the tea mat clean.' },
+    { n: 'Cloth', s: 'dries the vessels', f: 'Two coarse cloths used in turn, so everything stays dry.' },
+    { n: 'Display rack', s: 'displays the set', f: 'A wooden or bamboo stand on which the twenty-four vessels are laid out.' }
+  ],
+
+  flavors: [
+    { n: 'Downy', d: 'The dry, hay-like scent of the white down on buds, close to sun-dried grass; the signature of Silver Needle.' },
+    { n: 'Bean', d: 'The smell of fresh soymilk or stir-fried green soybeans, common in pan-fired greens such as Longjing.' },
+    { n: 'Chestnut', d: 'A sweet, roasted-chestnut note typical of pan-fired green tea, stronger at higher firing temperatures.' },
+    { n: 'Floral', d: 'From orchid to gardenia: oolong that is shaken with care develops flowers, and Dan Cong has many floral types.' },
+    { n: 'Fruity', d: 'Ripe peach, longan, dried fruit — more common in heavily oxidised oolongs and some black teas.' },
+    { n: 'Honey', d: 'A honeyed sweetness typical of black tea, produced as sugars and amino acids react during fermentation.' },
+    { n: 'Roast', d: 'The scent of the charcoal roast — toast crust, caramel — found in Wuyi rock tea and roasted oolong.' },
+    { n: 'Pine smoke', d: 'The smell of pine-wood smoke, the mark of Lapsang Souchong; traditional lots are smoked, though smoke-free versions exist.' },
+    { n: 'Aged', d: 'The quiet scent that comes with years of storage — old wood and dried dates; common in dark tea and aged white.' },
+    { n: 'Mushroom', d: 'The scent of “flowering” in Fu brick tea, caused by the fungus Eurotium cristatum; a faint mushroom and dried-fruit note.' },
+    { n: 'Date', d: 'A sweet dried-date aroma, often found in aged dark tea and simmered old white tea.' },
+    { n: 'Watery', d: 'Thin, empty liquor that tastes of nothing but water — too little leaf, too long a steep, or leaf that never had much to give.' }
+  ],
+
+  rituals: [
+    { id: 'gongfu', name: 'Chaozhou gongfu tea', where: 'Chaozhou · Shantou, Guangdong',
+      intro: 'A small pot, three tiny cups, a heavy charge of leaf and a strong brew. “Gongfu” does not mean spending time — it means spending care on every detail.',
+      steps: [
+        ['Warm', 'Scald pot and cups with boiling water'],
+        ['Load', 'Coarse leaf at the bottom, finer in the middle, coarse on top'],
+        ['Wait for the boil', 'Water just at the “crab-eye” stage is best'],
+        ['Pour', 'High pour, low serve; skim the foam, rinse the pot'],
+        ['Serve', 'Patrol the city, count the troops — three cups, equally strong']
+      ],
+      quiz: { q: 'What does “Lord Guan patrols the city” actually do?', o: ['Makes the three cups equally strong', 'Makes the tea more fragrant', 'Shows respect to the guest'], a: 0,
+        fb: 'Circling the pot over the three cups evens out the strength of the first and last pours; the final drops, “Han Xin counts his troops”, top each cup up.' } },
+    { id: 'sanda', name: 'Bai three-course tea', where: 'Dali, Yunnan · Bai people',
+      intro: 'Bitter, then sweet, then a lingering finish. First a roasted bitter tea, then a sweet one, and finally a cup with Sichuan pepper, cinnamon and ginger.',
+      steps: [
+        ['Roast', 'Dry-roast the leaf in a clay pot until the aroma bursts'],
+        ['Bitter', 'Pour boiling water over it — amber, and bitter'],
+        ['Sweet', 'Add brown sugar, walnuts and rubbed cheese'],
+        ['Finish', 'Add pepper, cinnamon and ginger: sweet with a numbing edge']
+      ],
+      quiz: { q: 'In what order are the three courses served?', o: ['Bitter, sweet, lingering', 'Sweet, bitter, lingering', 'Lingering, bitter, sweet'], a: 0,
+        fb: 'Bitter first, sweet second, a lingering finish last — the taste is also the blessing: work first, sweetness after, and something to remember.' } },
+    { id: 'suyou', name: 'Tibetan butter tea', where: 'Tibet · Qinghai · Sichuan',
+      intro: 'On the plateau tea is not drunk clear: brick tea is boiled strong, then churned with butter and salt into a warm, opaque drink.',
+      steps: [
+        ['Boil', 'Break the brick and boil it hard'],
+        ['Add', 'Strain into the churn with butter and salt'],
+        ['Churn', 'Pound it up and down until the butter emulsifies'],
+        ['Offer', 'Pour into a bowl and hand it over with both hands'],
+        ['Refill', 'The host refills as soon as the guest empties the bowl']
+      ],
+      quiz: { q: 'Why is salt essential in butter tea?', o: ['A plateau diet needs salt and calories', 'To preserve it', 'To improve the colour'], a: 0,
+        fb: 'With few vegetables at altitude, brick tea with butter and salt supplies both calories and minerals — a diet shaped by the environment.' } },
+    { id: 'naicha', name: 'Mongolian milk tea', where: 'The steppe, Inner Mongolia',
+      intro: 'Brick tea boiled, milk and salt added, served with fried millet, dried curd and milk skin — the first welcome in a ger.',
+      steps: [
+        ['Crush', 'Crush the brick and dry-fry it in the pan'],
+        ['Boil', 'Simmer with water, then strain'],
+        ['Milk', 'Add fresh milk and salt; keep it just below a boil'],
+        ['Serve', 'Ladle into bowls with millet and dried curd']
+      ],
+      quiz: { q: 'Who is served first?', o: ['The eldest', 'The children', 'The male guest'], a: 0,
+        fb: 'Elders before the young, guest before host. Take the bowl with both hands; some families first offer a drop to heaven and earth.' } },
+    { id: 'leicha', name: 'Hakka pounded tea', where: 'Fujian · Jiangxi · Guangdong',
+      intro: 'Tea, peanuts, sesame and ginger pounded to a paste in a stone mortar, then thinned with boiling water — savoury, thick, and enough to count as a meal.',
+      steps: [
+        ['Assemble', 'Tea, peanuts, sesame and ginger into the mortar'],
+        ['Pound', 'Grind clockwise into a fine paste'],
+        ['Thin', 'Pour in boiling water and stir'],
+        ['Serve', 'With puffed rice and side dishes — a “tea meal”']
+      ],
+      quiz: { q: 'Why is pounded tea often treated as a meal?', o: ['Its ingredients include grain and fat — it fills you up', 'It must be eaten with rice', 'It is only drunk at mealtimes'], a: 0,
+        fb: 'On the move, Hakka families made pounded tea with puffed rice to stave off hunger: tea, peanuts and sesame supply fat and calories. It is tea and a simple meal at once.' } }
+  ],
+
+  poems: [
+    { title: 'Thanking Meng Jianyi for New Tea', author: 'Tang · Lu Tong',
+      lines: ['One bowl wets the throat,', 'two bowls scatter the gloom,', 'three bowls search the dry intestines —', 'five thousand scrolls of writing there.', 'Seven bowls — I cannot go on:', 'I only feel a clear wind under both arms.'],
+      note: '<b>The Seven Bowls song.</b> From “wet the throat” to “wind under the arms”, Lu Tong turns the physiology of drinking tea into a flight to immortality. Every later mention of “seven bowls” comes from here.' },
+    { title: 'Drinking Tea, a Song for Cui Shijun', author: 'Tang · Jiaoran',
+      lines: ['One cup washes away sleep —', 'the mind brims, the world is wide;', 'a second clears my spirit —', 'like sudden rain on light dust;', 'a third and I have the Way —', 'why labour to break off affliction?'],
+      note: '<b>Tea as a path.</b> The monk Jiaoran puts tea on the road to enlightenment before Lu Tong did: wake, clear, release — three cups, three stages.' },
+    { title: 'New Buds from Hokeng, in Reply to Cao Fu', author: 'Song · Su Shi',
+      lines: ['Know that jade-and-snow is the heart that matters,', 'not the glossy sheen on the surface.', 'A little poem for your smile —', 'fine tea has always resembled a fine woman.'],
+      note: '<b>The most famous simile in tea writing.</b> Su Shi judges tea by inner quality, “jade and snow”, not by the shine on its surface.' },
+    { title: 'Cold Night', author: 'Song · Du Lei',
+      lines: ['On a cold night a guest comes: tea for wine,', 'the bamboo stove boils, the fire first red.', 'The moon at the window is nothing unusual —', 'but for the plum, it would not be the same.'],
+      note: '<b>Tea for wine.</b> No wine in the house, so tea will do; the stove is red and the water singing. Then the turn: the same moon, made different by one plum tree.' },
+    { title: 'Clearing after Rain in Lin’an', author: 'Song · Lu You',
+      lines: ['A low sheet of paper, careless cursive;', 'by the sunny window, fine foam — I play at dividing tea.'],
+      note: '<b>Dividing tea.</b> “Fine foam” is the white froth of whisked tea; “dividing tea” was a game of drawing on the foam. Two lines that hold an idle spring afternoon.' },
+    { title: 'Tea', author: 'Tang · Yuan Zhen',
+      lines: ['Tea.', 'Fragrant leaf, tender bud.', 'Courted by poets, loved by monks.', 'Ground on white jade, sifted through red gauze.', 'In the kettle it turns yellow; in the bowl, dust-fine flowers.', 'At night it keeps the moon company; at dawn it greets the glow.', 'It washes the ages clean and never tires — no wonder wine cannot match it.'],
+      note: '<b>A pagoda poem.</b> One character, then two more on each line, stacking like a tower. In a few lines it covers leaf, vessel, colour, hour and virtue.' }
+  ],
+
+  blind: [
+    { clues: ['Flat, straight leaf, rice-brown', 'Liquor pale green and bright', 'Bean aroma, fresh and brisk'], a: 'Green tea',
+      e: 'A flat leaf comes from pan-pressing; the rice-brown colour and bean aroma are signatures of Longjing. With no oxidation, the liquor stays green.' },
+    { clues: ['Fat buds covered in white down', 'Liquor pale apricot, almost colourless', 'Downy aroma, light and sweet'], a: 'White tea',
+      e: 'Withered and dried only — no pan-fire, no rolling — so the liquor is pale and the taste light and sweet. This is Silver Needle.' },
+    { clues: ['Tight twisted leaf, olive green', 'Liquor golden yellow', 'Orchid scent, still there after seven infusions'], a: 'Oolong',
+      e: 'Olive leaf, golden liquor, orchid and patience across many infusions all point to a southern Fujian oolong; “seven infusions and still fragrant” is the old praise for Tieguanyin.' },
+    { clues: ['Glossy dark leaf with golden tips', 'Liquor bright red', 'Heavy honey aroma, sweet body'], a: 'Black tea',
+      e: 'Full oxidation turns polyphenols into theaflavins and thearubigins: red liquor, less astringency, more sweetness. Honey is the common language of black tea.' },
+    { clues: ['Pressed into a cake, dark brown', 'Liquor deep red', 'Steady aged aroma, smooth body'], a: 'Dark tea',
+      e: 'Pressing and pile fermentation are the two calling cards of dark tea; the aged note comes from later transformation, and the liquor runs deeper than black tea.' },
+    { clues: ['Tender yellow buds with down', 'Yellow liquor, yellow leaf', 'Sweet corn aroma, barely astringent'], a: 'Yellow tea',
+      e: '“Yellow liquor, yellow leaf” is the direct result of menhuang: the warm leaf is sealed, oxidises slightly, softens and picks up a sweet-corn note.' },
+    { clues: ['Dark glossy leaf, heavy roast aroma', 'Liquor amber-orange', 'Mineral “rock rhyme”, long finish'], a: 'Oolong',
+      e: 'Roast and rock rhyme mark Wuyi rock tea, a northern Fujian oolong. Amber rather than red tells you oxidation stopped short of black tea.' },
+    { clues: ['Tightly rolled spirals, heavy down', 'Liquor pale yellow and clear', 'Fresh chestnut, brisk with a little bite'], a: 'Green tea',
+      e: 'The spiral shape and visible down are Biluochun; as an unoxidised green it keeps plenty of polyphenols, so freshness always comes with a touch of astringency.' }
+  ],
+
+  doucha: [
+    { a: { color: 'Bright white', foam: 'Fine, clinging to the bowl', mark: 'Slow to retreat' },
+      b: { color: 'Blue-white', foam: 'Coarse, scatters', mark: 'Retreats first' },
+      win: 'a',
+      why: 'White ranks above blue-white; one foam clings while the other scatters, and the water line shows on B first. A wins on all three counts.' },
+    { a: { color: 'Yellow-white', foam: 'Coarse', mark: 'First to retreat' },
+      b: { color: 'Blue-white', foam: 'Fine, clinging', mark: 'Retreats later' },
+      win: 'b',
+      why: 'The Record of Tea ranks white first, blue-white next, yellow-white below. B is a grade higher in colour, finer in foam and later to show the line.' },
+    { a: { color: 'Bright white', foam: 'Fine', mark: 'Retreats first' },
+      b: { color: 'Bright white', foam: 'Slightly coarse', mark: 'Holds long' },
+      win: 'b',
+      why: 'The closest round: colour is level and A has the finer foam, but its water line appears first. In a tea contest the first line loses — endurance beats prettiness.' }
+  ],
+
+  quiz: [
+    { l: 1, t: '茶史', q: 'Who wrote The Classic of Tea?', o: ['Lu Yu', 'Cai Xiang', 'Emperor Huizong', 'Lu Tong'], a: 0,
+      e: 'Lu Yu completed The Classic of Tea around 780 CE. It systematised growing, making, boiling and tasting, and earned him the title of Tea Sage.' },
+    { l: 1, t: '茶类', q: 'Which of the six tea types is post-fermented?', o: ['White tea', 'Oolong', 'Dark tea', 'Yellow tea'], a: 2,
+      e: 'Dark tea goes through pile fermentation, in which microbes take part — a true post-fermentation. Ripe Pu-erh, Anhua dark tea and Liubao are all made this way, which is why they keep.' },
+    { l: 1, t: '茶器', q: 'What did Song tea-makers use to whisk the tea?', o: ['A spoon', 'A bamboo whisk', 'A roller', 'A sieve'], a: 1,
+      e: 'The whisk is split from bamboo; beating the liquor briskly makes a fine white foam. The Japanese chasen descends directly from the Song whisk.' },
+    { l: 1, t: '茶史', q: 'Which book set out the rules for tea contests?', o: ['The Classic of Tea', 'Record of Tea', 'Treatise on Tea', 'Notes on Tea'], a: 1,
+      e: 'Cai Xiang’s Record of Tea states that the foam should be bright white and leave no water line on the bowl, and rules that the side showing the line first loses.' },
+    { l: 1, t: '茶史', q: 'Which emperor ordered pressed dragon cakes replaced by loose leaf?', o: ['Huizong of Song', 'Hongwu of Ming', 'Kangxi of Qing', 'Xuanzong of Tang'], a: 1,
+      e: 'In 1391 the Hongwu Emperor ordered the Jianning dragon-and-phoenix cakes abolished and loose leaf sent instead. The grind-and-whisk ritual faded and steeping took over.' },
+    { l: 1, t: '茶器', q: 'How many vessels does the Classic of Tea list?', o: ['Twelve', 'Eighteen', 'Twenty-four', 'Thirty-six'], a: 2,
+      e: 'Lu Yu specified twenty-four pieces, from the wind stove and cauldron down to the cloth and display rack — a complete kit for Tang tea.' },
+    { l: 1, t: '茶器', q: 'Where were Song Jian bowls made?', o: ['Longquan, Zhejiang', 'Jianyang, Fujian', 'Jingdezhen, Jiangxi', 'Ruzhou, Henan'], a: 1,
+      e: 'Jian bowls came from the Jianyang area of Fujian. Their iron-rich dark glaze crystallises in the kiln into hare’s-fur and oil-spot patterns, and sets off white foam.' },
+    { l: 1, t: '民俗', q: 'In gongfu tea, “Lord Guan patrols the city” means…', o: ['Circling the pot so each cup is equally strong', 'Rinsing the pot with boiling water', 'Pouring from a height', 'Offering the first cup to the guest'], a: 0,
+      e: 'The pot is carried round the three cups as it pours, so the first and last cups end up alike; the final drops are tapped into each cup, “Han Xin counts his troops”.' },
+    { l: 1, t: '茶类', q: 'The basic process for white tea is…', o: ['Fixation and rolling', 'Withering and drying', 'Pile fermentation and pressing', 'Shaking and roasting'], a: 1,
+      e: 'White tea is neither pan-fired nor rolled: the leaf withers and dries, oxidising slowly. That is why it smells of down and tastes light and sweet.' },
+    { l: 1, t: '茶类', q: 'What makes yellow tea yellow?', o: ['Menhuang — sealed yellowing', 'Pile fermentation', 'Shaking', 'Roasting'], a: 0,
+      e: 'After fixation or rolling the warm leaf is sealed and left; gentle oxidation turns both leaf and liquor yellow and brings a sweet-corn aroma. It is the signature step.' },
+    { l: 1, t: '茶史', q: 'The English word “tea” most likely comes from…', o: ['Minnan Chinese', 'Cantonese', 'Wu Chinese', 'Mandarin'], a: 0,
+      e: 'Tea left by sea and the Dutch borrowed the Minnan pronunciation “tê”, which became “tea”. Languages reached overland mostly use a “cha” form.' },
+    { l: 1, t: '民俗', q: 'The main ingredients of Tibetan butter tea are…', o: ['Green tea, rock sugar, chrysanthemum', 'Brick tea, butter, salt', 'Black tea, milk, sugar', 'Oolong, honey, ginger'], a: 1,
+      e: 'Brick tea is boiled strong, then churned with butter and salt into an opaque drink that supplies calories and salt at altitude.' },
+
+    { l: 2, t: '茶类', q: 'Flat, smooth, rice-brown leaf; pale green liquor; clear bean aroma. Most likely…', o: ['Longjing', 'Silver Needle', 'Keemun', 'Ripe Pu-erh'], a: 0,
+      e: 'Longjing is pressed flat during firing; the rice-brown colour and bean aroma are its signatures, and the green liquor confirms it is unoxidised.' },
+    { l: 2, t: '茶类', q: 'Amber liquor with “green leaf, red edge” in the spent leaf. Which type?', o: ['Green tea', 'Oolong', 'Black tea', 'Dark tea'], a: 1,
+      e: 'During shaking the leaf edges bruise and oxidise first, so the rim reddens while the centre stays green — the clearest visual proof of half-oxidation.' },
+    { l: 2, t: '茶类', q: 'Deep red liquor, clear aged aroma, pressed into a cake. Most likely…', o: ['White Peony', 'Lapsang Souchong', 'Ripe Pu-erh', 'Junshan Silver Needle'], a: 2,
+      e: 'Ripe Pu-erh is pile-fermented and usually pressed into cakes or bricks; the liquor is deep red with aged and date notes, unlike the bright red of black tea.' },
+    { l: 2, t: '茶类', q: 'Fat buds covered in white down, pale apricot liquor. This is…', o: ['Silver Needle', 'Longjing', 'Tieguanyin', 'Liubao'], a: 0,
+      e: 'Silver Needle is made entirely of plump buds covered in down; the liquor is pale apricot and the aroma downy and sweet. It is the top grade of white tea.' },
+    { l: 2, t: '茶类', q: 'Glossy dark leaf with golden tips, bright red liquor, heavy honey aroma. This is…', o: ['Green tea', 'White tea', 'Black tea', 'Yellow tea'], a: 2,
+      e: 'Full oxidation turns polyphenols into theaflavins and thearubigins: red liquor, red leaf, honey and sweetness are the common marks of black tea.' },
+    { l: 2, t: '茶类', q: 'Yellow liquor, yellow leaf, sweet-corn aroma. This is…', o: ['Yellow tea', 'Oolong', 'Black tea', 'Dark tea'], a: 0,
+      e: 'The yellow comes from menhuang; both liquor and leaf turn yellow, the aroma leans to sweet corn or toasted rice, and astringency is lower than in green tea.' },
+    { l: 2, t: '茶类', q: 'High, sharp orchid aroma, still fragrant after seven infusions. Most likely…', o: ['Biluochun', 'Tieguanyin', 'Shou Mei', 'Keemun'], a: 1,
+      e: 'Tieguanyin is a southern Fujian oolong; shaking and rolling give it “Guanyin rhyme”. Good lots show clear orchid and keep going for many infusions.' },
+    { l: 2, t: '茶史', q: '“White foam that clings to the bowl and does not scatter” describes…', o: ['The foam of Tang boiled tea', 'The ideal of Song whisked tea', 'The froth of Ming steeping', 'The liquor of Qing gongfu'], a: 1,
+      e: 'Song tea was judged by foam that was creamy white, fine and clinging to the bowl — “biting the bowl” — the central standard of whisking and contests.' },
+
+    { l: 3, t: '冲泡', q: 'You pour boiling water straight onto pre-Qingming Longjing. What is most likely?', o: ['More fragrance', 'Freshness gone, bitterness up', 'A clearer liquor', 'More infusions'], a: 1,
+      e: 'Tender spring buds give up polyphenols and caffeine fast in boiling water, burying the amino acids that make the tea fresh. 80–85 °C keeps the sweetness.' },
+    { l: 3, t: '冲泡', q: 'To make green tea look and taste its best in a glass, first…', o: ['Add leaf, then pour hard', 'Warm the glass and pour 80 °C water down the side', 'Cover and wait three minutes', 'Stir with a spoon'], a: 1,
+      e: 'Warming the glass slows heat loss, and pouring down the side spares the leaf; it opens evenly and the liquor stays clear.' },
+    { l: 3, t: '民俗', q: 'Why does gongfu tea often set out just three cups?', o: ['There are only three cups', 'The traditional “three cups, one pot” setting', 'Three cups per person', 'To save leaf'], a: 1,
+      e: 'Three cups and one pot is the classic gongfu arrangement: it suits the circling pour and echoes the idea that fine tea is tasted in three sips.' },
+    { l: 3, t: '民俗', q: 'The correct order of Bai three-course tea is…', o: ['Bitter, sweet, lingering', 'Sweet, bitter, lingering', 'Lingering, bitter, sweet', 'Bitter, lingering, sweet'], a: 0,
+      e: 'Bitter tea first, sweet second, and a last cup with pepper, cinnamon and ginger: bitter first, sweet after, something to remember.' },
+    { l: 3, t: '民俗', q: 'A Mongolian host offers you tea. You should…', o: ['Take it one-handed and sip', 'Take it with both hands, elders first', 'Leave it on the table', 'Smell it and hand it back'], a: 1,
+      e: 'Elders before the young, guest before host; take the bowl with both hands. In some places the first drops are offered to heaven and earth.' },
+    { l: 3, t: '冲泡', q: 'What do you do with the first pour on pressed dark tea?', o: ['Drink it — strongest and best', 'Rinse quickly and discard', 'Use it to warm the cups', 'Keep it for last'], a: 1,
+      e: 'A quick rinse washes off dust and wakes the compressed leaf; the real flavour starts with the second pour and keeps improving.' },
+    { l: 3, t: '冲泡', q: 'Your black tea tastes astringent. To make it sweeter…', o: ['Raise the temperature and steep longer', 'Lower the temperature or shorten the steep', 'Add more leaf', 'Pour hard with boiling water'], a: 1,
+      e: 'Black tea is fully oxidised; hot, long steeps pull out astringency. Cooler water or a quicker pour lets the honeyed sweetness come forward.' },
+    { l: 3, t: '冲泡', q: 'Black tea goes cloudy as it cools. This is called…', o: ['Cream down', 'Returning green', 'Going off', 'Frosting'], a: 0,
+      e: 'Theaflavins and caffeine associate at low temperature and come out of solution. It signals a rich liquor and usually clears on warming.' },
+    { l: 3, t: '冲泡', q: 'After pouring oolong from a lidded bowl, you should…', o: ['Leave a little liquor behind', 'Drain it completely', 'Add cold water at once', 'Clamp the lid shut'], a: 1,
+      e: 'Liquid left behind keeps steeping the leaf, so the next pour turns bitter. Draining fully keeps each infusion under control.' },
+    { l: 3, t: '茶器', q: 'Why does a Yixing pot keep to one tea?', o: ['The clay fades', 'Its double-pore body holds aroma, so teas would mix', 'It can only brew one style', 'For looks'], a: 1,
+      e: 'Yixing clay has a double-pore structure that takes on the aroma of the tea it brews. One pot, one tea, or the scents blur.' },
+    { l: 3, t: '茶史', q: 'In a Song tea contest, the “water line” is…', o: ['The foam on the surface', 'The mark left on the bowl as foam retreats', 'The dregs at the bottom', 'Steam from the kettle'], a: 1,
+      e: 'Judges watched how long the foam clung to the bowl; the side that first showed the water line lost. It was the decisive test, more than colour.' },
+    { l: 3, t: '民俗', q: 'Ordering “gongfu tea” in a teahouse usually gets you…', o: ['A large pot to help yourself', 'Small pots, tiny cups and many infusions', 'A cup of milk tea', 'A bag of leaf to take away'], a: 1,
+      e: 'Gongfu is about the labour: small vessels, strong liquor, frequent pouring, a dozen infusions from one pot — the pleasure is in the change.' },
+
+    { l: 4, t: '茶类', q: 'Dark glossy leaf, amber liquor, red edge in the spent leaf, strong roast aroma. Most likely…', o: ['Wuyi rock tea', 'Keemun', 'Ripe Pu-erh', 'Huoshan yellow bud'], a: 0,
+      e: 'Roast and “rock rhyme” mark Wuyi rock tea, a northern Fujian oolong. A red edge shows the shaking worked; amber rather than red shows oxidation stopped short of black tea.' },
+    { l: 4, t: '工艺', q: 'From one batch of fresh leaf, A is fragrant and pale, B is honeyed and amber. The difference is most likely…', o: ['The cultivar', 'The degree of oxidation and roast', 'The picking season', 'The region'], a: 1,
+      e: 'The same leaf can be green tea or black tea; the difference is process. More oxidation means a deeper liquor and a honeyed aroma. Type is made, not grown.' },
+    { l: 4, t: '茶史', q: 'A Ming text uses the word “cuopao” (pinch-and-steep). This shows…', o: ['Whisking was still dominant', 'Loose-leaf steeping had become common', 'Tea was only medicinal', 'Cakes were still the norm'], a: 1,
+      e: '“Cuopao” means throwing loose leaf into a cup and pouring water on it, replacing grind-and-whisk. It follows directly from the 1391 order to send loose leaf.' },
+    { l: 4, t: '茶史', q: 'Tang boiled tea was seasoned with salt. This suggests…', o: ['Tea was a savoury drink', 'Salt preserved it', 'Tea was too bitter', 'Salt was a luxury'], a: 0,
+      e: 'Lu Yu added salt at the third boil, giving a savoury, saline liquor — very different from the plain drinking of today. Methods change with the times.' },
+    { l: 4, t: '工艺', q: 'How do the hare’s-fur patterns on Jian bowls form?', o: ['They are painted on', 'Iron in the glaze crystallises in the kiln', 'They wear in with use', 'Kiln ash falls on the glaze'], a: 1,
+      e: 'Jian glaze is rich in iron; at high temperature iron oxides crystallise and flow with the glaze, giving hare’s-fur and oil-spot effects. No two bowls are alike.' },
+    { l: 4, t: '工艺', q: 'Can one tea bush make both green and black tea?', o: ['Yes — the process differs', 'No — the cultivars differ', 'Only one type', 'It depends on age'], a: 0,
+      e: 'Tea type is decided by process, not cultivar: fixation without oxidation gives green tea, full oxidation gives black tea. The same leaf can go either way.' },
+    { l: 4, t: '茶类', q: 'High-mountain tea usually lasts more infusions because…', o: ['Lower air pressure', 'Slower growth builds more compounds', 'Thicker leaves do not break', 'More fertiliser'], a: 1,
+      e: 'Big day-night temperature swings and a long growing season let buds accumulate amino acids and sugars, so the taste is fuller and lasts longer — though processing matters just as much.' },
+    { l: 4, t: '茶类', q: 'A tea labelled “three years aged” is most likely…', o: ['Green tea or light oolong', 'White tea or dark tea', 'Yellow tea or black tea', 'Any tea at all'], a: 1,
+      e: 'White and dark teas are traditionally aged; their processing allows later change. Greens and light oolongs are prized for freshness and lose aroma with time.' }
+  ]
+};
+
+const DATA = LANG === 'en' ? DATA_EN : DATA_ZH;
+</script>
+<script>
+/* =========================================================
+   CORE —— 工具、存储、导航、时间轴、光谱、二十四器、图鉴
+   ========================================================= */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const shuffle = a => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- 存储 ---------- */
+const KEY = 'tea_leaf_life_v1';
+const state = { unlocked: new Set(), wrong: [], best: 0, sound: false, guide: false };
+try {
+  const s = JSON.parse(localStorage.getItem(KEY) || '{}');
+  state.unlocked = new Set(s.unlocked || []);
+  state.wrong = s.wrong || [];
+  state.best = s.best || 0;
+  state.sound = !!s.sound;
+  state.guide = !!s.guide;
+} catch (e) { /* 隐私模式下静默降级 */ }
+function persist() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify({
+      unlocked: [...state.unlocked], wrong: state.wrong,
+      best: state.best, sound: state.sound, guide: state.guide
+    }));
+  } catch (e) {}
+}
+
+/* ---------- 图鉴条目 ---------- */
+const ENTRIES = (() => {
+  const list = [];
+  DATA.vessels.forEach((v, i) => list.push({ key: 'v:' + i, name: v.n, type: TX('器', 'Vessel'), desc: v.f }));
+  DATA.teas.forEach((t, ti) => t.reps.forEach((r, ri) => list.push({
+    key: 't:' + ti + '-' + ri, name: r, type: TX('茶', 'Tea'),
+    desc: `${t.name} · ${t.craft} · ${t.aroma} · ${t.liquor}`
+  })));
+  DATA.rituals.forEach(r => list.push({ key: 'r:' + r.id, name: r.name, type: TX('俗', 'Custom'), desc: r.intro }));
+  DATA.poems.forEach((p, i) => list.push({
+    key: 'p:' + i, name: p.title, type: TX('诗', 'Poem'),
+    desc: `${p.author}. ${p.note.replace(/<[^>]+>/g, '')}`
+  }));
+  return list;
+})();
+const TOTAL = ENTRIES.length;
+const KEY_SET = new Set(ENTRIES.map(e => e.key));
+
+/* 旧版本用“名称”作解锁键，这里迁移到编号，并丢掉无效键 */
+const LEGACY = new Map();
+DATA_ZH.vessels.forEach((v, i) => LEGACY.set('v:' + v.n, 'v:' + i));
+DATA_ZH.teas.forEach((t, ti) => t.reps.forEach((r, ri) => LEGACY.set('t:' + r, 't:' + ti + '-' + ri)));
+DATA_ZH.poems.forEach((p, i) => LEGACY.set('p:' + p.title, 'p:' + i));
+(function migrate() {
+  let changed = false;
+  const next = new Set();
+  state.unlocked.forEach(k => {
+    let nk = k;
+    if (!KEY_SET.has(k) && LEGACY.has(k)) nk = LEGACY.get(k);
+    if (KEY_SET.has(nk)) next.add(nk);
+    if (nk !== k || !KEY_SET.has(nk)) changed = true;
+  });
+  if (changed) { state.unlocked = next; persist(); }
+})();
+
+function codexCount() {
+  let n = 0;
+  ENTRIES.forEach(e => { if (state.unlocked.has(e.key)) n++; });
+  return n;
+}
+
+function refreshCodexCount() {
+  const n = codexCount();
+  $('#codexCount').textContent = n + '/' + TOTAL;
+  $('#codexSub').textContent = n + ' / ' + TOTAL;
+}
+function unlock(key, opts) {
+  if (!key || !KEY_SET.has(key) || state.unlocked.has(key)) return false;
+  state.unlocked.add(key);
+  persist();
+  refreshCodexCount();
+  if (document.getElementById('codexModal').classList.contains('show')) renderCodex();
+  if (!opts || !opts.silent) { beep(880, .09, 'sine', .04); toast(TX('图鉴 +1 · ', 'Codex +1 · ') + (opts && opts.name ? opts.name : '')); }
+  return true;
+}
+
+/* ---------- 提示与音效 ---------- */
+let toastTimer = null;
+function toast(msg) {
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1900);
+}
+let actx = null;
+function beep(freq = 660, dur = .08, type = 'sine', vol = .045) {
+  if (!state.sound) return;
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.value = vol;
+    o.connect(g); g.connect(actx.destination);
+    o.start();
+    g.gain.exponentialRampToValueAtTime(.0001, actx.currentTime + dur);
+    o.stop(actx.currentTime + dur + .02);
+  } catch (e) {}
+}
+function ok() { beep(784, .09); setTimeout(() => beep(1046, .12), 80); }
+function err() { beep(196, .16, 'triangle', .05); }
+
+/* ---------- 语言切换与静态文案 ---------- */
+(function applyLang() {
+  document.documentElement.lang = LANG === 'en' ? 'en' : 'zh-CN';
+  document.body.classList.toggle('lang-en', LANG === 'en');
+  const btn = $('#langBtn');
+  btn.textContent = LANG === 'en' ? '中文' : 'EN';
+  btn.title = LANG === 'en' ? '切换到中文' : 'Switch to English';
+  btn.setAttribute('aria-label', LANG === 'en' ? '切换到中文' : 'Switch to English');
+  btn.addEventListener('click', () => {
+    const next = LANG === 'en' ? 'zh' : 'en';
+    try { localStorage.setItem('tea_lang', next); } catch (e) {}
+    location.reload();
+  });
+  if (LANG !== 'en') return;
+
+  const setHTML = (sel, html) => { const el = $(sel); if (el) el.innerHTML = html; };
+  const setText = (sel, text) => { const el = $(sel); if (el) el.textContent = text; };
+  document.title = 'A Leaf’s Life · An Interactive Scroll of Chinese Tea';
+
+  setText('.brand small', 'A life in one leaf');
+  ['Origin', 'Types', 'Vessels', 'Craft', 'Taste', 'Rituals', 'Exam'].forEach((t, i) => {
+    const a = $$('.topnav a')[i]; if (a) a.textContent = t;
+  });
+  $('.topnav').setAttribute('aria-label', 'Chapters');
+  setText('#codexBtn .lbl', 'Codex');
+
+  setText('.hero-kicker', 'CHINESE TEA · AN INTERACTIVE SCROLL');
+  setText('.hero-title span:nth-child(1)', 'A single leaf');
+  setText('.hero-title span:nth-child(2)', 'a whole life');
+  setHTML('.hero-sub', 'From mountain to cup: six chapters, six games, forty questions.<br>Every step asks you to do something.');
+  setText('.hero-actions .primary', 'Begin');
+  setText('.hero-actions .ghost', 'Take the exam');
+  setText('.hero-scroll', 'Scroll · the leaf is opening');
+
+  /* 一 · 源 */
+  setText('#origin .chapter-head .num', 'I');
+  setText('#origin .chapter-head h2', 'Origin');
+  setText('#origin .chapter-head p', 'Where tea comes from · four ways of drinking');
+  setText('#origin .lead', 'The same leaf: the Tang boiled it, the Song whisked it, the Ming steeped it, the Qing made gongfu of it. How people drank says more about how they lived than the tea itself. Pick an era to see how a bowl got to the mouth.');
+  $('#tlItems').setAttribute('aria-label', 'Four eras of drinking tea');
+  setText('.tea-road h3', 'The road a cup takes');
+  setText('.tea-road > p', 'Tea did not only travel toward cups. It travelled to the frontier too. The plains lacked horses, the highlands lacked tea — and a meat-heavy diet made tea a welcome way to cut grease and add what green vegetables could not. So a thousand-year trade grew up: tea pressed into bricks, horses driven in herds, two ways of life tied together.');
+  const routes = $$('.routes > div');
+  if (routes[0]) routes[0].innerHTML = '<b>Sichuan–Tibet</b>Ya’an (Mengding) → Kangding → Chamdo → Lhasa; brick tea traded for horses, salt and hides.';
+  if (routes[1]) routes[1].innerHTML = '<b>Yunnan–Tibet</b>Pu’er → Dali → Lijiang → Zhongdian → Lhasa; Pu’er pressed into cakes and bowls to survive the journey.';
+  setText('.tea-road .note', '“Tea Horse Road” is a term coined in the 1990s. Historically the trade was called the tea-horse market — the older name is the more accurate one for ancient history.');
+
+  /* 二 · 类 */
+  setText('#types .chapter-head .num', 'II');
+  setText('#types .chapter-head h2', 'Types');
+  setText('#types .chapter-head p', 'Six families · one spectrum of oxidation');
+  setHTML('#types .lead', 'The six tea families are not six plants but <em>one leaf stopped at different degrees of oxidation</em>. Drag the six cards onto the spectrum below — land correctly and each locks in place and unlocks its three representative teas.');
+  setText('#specStat', 'Placed 0 / 6');
+  setText('#types .spec-top .tip', 'Drag a card → drop it at the right point');
+  const labels = ['None', 'Slight', 'Half', 'Full', 'Post'];
+  $$('.axis-label span').forEach((s, i) => { if (labels[i]) s.textContent = labels[i]; });
+  setHTML('#teaDetail', '<p class="tip" style="color:var(--ink-3);font-size:13px;margin:0">Click a tea card to see its process, liquor and representative teas.</p>');
+
+  /* 三 · 器 */
+  setText('#vessels .chapter-head .num', 'III');
+  setText('#vessels .chapter-head h2', 'Vessels');
+  setText('#vessels .chapter-head p', 'The twenty-four vessels of Lu Yu · pair to unlock');
+  setText('#vessels .lead', 'In the fourth chapter of The Classic of Tea, Lu Yu listed twenty-four pieces for boiling a single bowl. Here they come in four sets: match each vessel to its use and it joins your codex.');
+  setHTML('.vm-head span:nth-child(1)', 'Set <b id="vmRound">1</b> / 4');
+  setHTML('.vm-head span:nth-child(2)', 'Paired <b id="vmCount">0</b> / 24 · Misses <b id="vmErr">0</b>');
+  $('#vmNames').setAttribute('aria-label', 'Vessel names');
+  $('#vmUses').setAttribute('aria-label', 'Uses');
+
+  /* 四 · 艺 */
+  setText('#craft .chapter-head .num', 'IV');
+  setText('#craft .chapter-head h2', 'Craft');
+  setText('#craft .chapter-head p', 'Whisking · contests · brewing');
+  setText('#craft .lead', 'The Song drank tea by “whisking”: powder worked into a paste, then a bamboo whisk beating it into a creamy foam. Three things follow, each more tactile than the last.');
+  const subH = $$('#craft .sub-h');
+  if (subH[0]) subH[0].textContent = 'One · whisking';
+  if (subH[1]) subH[1].textContent = 'Two · the tea contest';
+  if (subH[2]) subH[2].textContent = 'Three · brewing';
+  const subP = $$('#craft .sub-p');
+  if (subP[0]) subP[0].innerHTML = 'Press and hold, and <em>circle</em> inside the bowl. Keep the speed in the green band and the foam turns fine. Seven infusions, after the rhythm in the Treatise on Tea: light at first, quick in the middle, delicate at the close.';
+  if (subP[1]) subP[1].innerHTML = 'A contest compares three things: <em>colour</em>, <em>foam</em>, <em>water line</em>. The standard comes from Cai Xiang’s Record of Tea — white is best, the foam must cling, and the side that shows its water line first loses. Best of three; you are the judge.';
+  if (subP[2]) subP[2].innerHTML = 'Pick a tea, set water temperature, time and leaf-to-water ratio, and see what happens. The score is only a guide; the <em>trend</em> is the real lesson.';
+  setHTML('.canvas-hud', 'Infusion <b id="whiskTxt">1</b> / 7');
+  setText('.canvas-tip', 'Hold and circle · keep the speed mid-range');
+  const meters = $$('.meter label');
+  if (meters[0]) meters[0].innerHTML = 'Whisking speed <b id="speedLbl">0</b>';
+  if (meters[1]) meters[1].innerHTML = 'Foam fineness <b id="foamLbl">0%</b>';
+  setHTML('#whiskResult', '<span style="color:var(--ink-3);font-size:13px">After seven infusions, a verdict appears here.</span>');
+  setText('#whiskReset', 'Whisk another bowl');
+  setHTML('.dc-top span:nth-child(1)', 'Round <b id="dcRound">1</b> / 3');
+  setText('#dcScore', 'You 0 : 0 Rival');
+  const brewLabels = $$('.ctrl span');
+  ['Water', 'Time', 'Ratio'].forEach((t, i) => { if (brewLabels[i]) brewLabels[i].textContent = t; });
+  setText('.brew-out small', 'pts');
+  setText('#brewFlavor', 'Adjust the sliders and watch the liquor change.');
+
+  /* 五 · 味 */
+  setText('#taste .chapter-head .num', 'V');
+  setText('#taste .chapter-head h2', 'Taste');
+  setText('#taste .chapter-head p', 'Blind tasting · flavour wheel');
+  setText('#taste .lead', 'Look at the leaf, the liquor, the smell, the taste — a tea taster reads a tea by crossing three clues. Eight blind tastings: name the family from three clues.');
+  setHTML('.blind-top span:nth-child(1)', 'Blind tasting · <b id="blindIdx">1</b> / 8');
+  setHTML('.blind-top span:nth-child(2)', 'Streak <b id="blindStreak">0</b> · Correct <b id="blindScore">0</b>');
+  setText('#blindNext', 'Next');
+  setText('#blindReset', 'Restart');
+  setHTML('#wheelInfo', '<b>Twelve aromas</b>Pick a word to see what it means.');
+
+  /* 六 · 礼 */
+  setText('#ritual .chapter-head .num', 'VI');
+  setText('#ritual .chapter-head h2', 'Rituals');
+  setText('#ritual .chapter-head p', 'Five tea customs · six poems');
+  setText('#ritual .lead', 'Tea was never only a drink. It is the rule for receiving a guest, the warmth on a high plateau, the savoury bowl of a Hakka kitchen. Open each card to see how one place drinks and welcomes.');
+  $('#poemSide').setAttribute('aria-label', 'Poems');
+
+  /* 考 */
+  setText('#exam .chapter-head .num', '✦');
+  setText('#exam .chapter-head h2', 'The Tea Exam');
+  setText('#exam .chapter-head p', 'Forty questions · five ranks');
+  setHTML('#exam .rank', 'Current rank <b id="examRank">Tea Guest</b>');
+  setText('#examStat', 'Forty questions · four levels');
+
+  /* 页脚 */
+  const foot = $$('footer p');
+  if (foot[0]) foot[0].textContent = 'A cultural essay, not medical advice. Sources: The Classic of Tea, Record of Tea, Treatise on Tea, and standard tea-science texts.';
+  if (foot[1]) foot[1].textContent = 'A Leaf’s Life · an interactive scroll · runs offline, with no external requests';
+
+  /* 图鉴与引导 */
+  setText('#codexTitle', 'The Tea Codex');
+  setText('#codexClose', '×');
+  $('#codexClose').setAttribute('aria-label', 'Close');
+  setText('#codexDetail', 'Unlocked entries can be opened to see what they are.');
+  setText('#guide h2', 'Three things first');
+  setText('#guide .guide-card > p', 'This page is not for reading. It is for doing.');
+  const steps = $$('.guide-steps div');
+  if (steps[0]) steps[0].innerHTML = '<b>1</b><span><strong>Drag</strong>: put the six tea cards on the oxidation spectrum; correct ones lock in place.</span>';
+  if (steps[1]) steps[1].innerHTML = '<b>2</b><span><strong>Circle</strong>: hold and circle in the bowl to whisk up foam — seven infusions to a bowl.</span>';
+  if (steps[2]) steps[2].innerHTML = '<b>3</b><span><strong>Answer</strong>: blind tastings, tea contests, forty exam questions; mistakes go to your review list.</span>';
+  setText('#guideStart', 'Start');
+  $$('[data-en]').forEach(el => { if (el.dataset.en != null) el.innerHTML = el.dataset.en; });
+  $$('[data-alt-en]').forEach(el => { el.alt = el.dataset.altEn; });
+})();
+
+/* ---------- 首屏画布：水中舒展的叶子 ---------- */
+(function heroCanvas() {
+  const c = $('#heroCanvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  let w = 0, h = 0, dpr = 1, t0 = performance.now();
+
+  function resize() {
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    w = c.clientWidth; h = c.clientHeight;
+    c.width = Math.round(w * dpr); c.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function leaf(cx, cy, s, rot, alpha) {
+    ctx.save();
+    ctx.translate(cx, cy); ctx.rotate(rot); ctx.scale(s, s);
+    ctx.globalAlpha = alpha;
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.bezierCurveTo(30, -28, 66, -20, 82, 0);
+    ctx.bezierCurveTo(66, 20, 30, 28, 0, 0);
+    ctx.strokeStyle = 'rgba(107,74,47,.62)'; ctx.lineWidth = 1.1; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(80, 0);
+    ctx.strokeStyle = 'rgba(107,74,47,.34)'; ctx.stroke();
+    for (let i = 1; i < 5; i++) {
+      const x = i * 16;
+      ctx.beginPath();
+      ctx.moveTo(x, 0); ctx.quadraticCurveTo(x + 9, -9, x + 15, -14);
+      ctx.moveTo(x, 0); ctx.quadraticCurveTo(x + 9, 9, x + 15, 14);
+      ctx.strokeStyle = 'rgba(107,74,47,.16)'; ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function draw(now) {
+    const t = (now - t0) / 1000;
+    ctx.clearRect(0, 0, w, h);
+    const cx = w / 2, cy = h * 0.5;
+    const R = Math.min(w, h) * 0.36;
+    ctx.save();
+    ctx.globalAlpha = .5;
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(107,74,47,.18)'; ctx.lineWidth = 1; ctx.stroke();
+    // 扩散的水纹
+    for (let i = 0; i < 3; i++) {
+      const p = ((t * 0.16 + i / 3) % 1);
+      ctx.beginPath();
+      ctx.arc(cx, cy, R * (0.35 + p * 1.05), 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(123,163,155,${(1 - p) * .22})`;
+      ctx.stroke();
+    }
+    ctx.restore();
+    const breathe = reduceMotion ? 1 : 1 + Math.sin(t * 0.6) * 0.018;
+    const rot = reduceMotion ? -0.14 : -0.14 + Math.sin(t * 0.35) * 0.08;
+    leaf(cx - 20, cy + 12, Math.min(w, h) / 300 * 1.62 * breathe, rot, .30);
+    if (!reduceMotion) requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+  if (reduceMotion) draw(performance.now() + 1);
+})();
+
+/* ---------- 滚动进度 / 导航高亮 / 出现动画 ---------- */
+(function scrollUI() {
+  const line = $('#scrollLine');
+  let ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      const p = max > 0 ? scrollY / max : 0;
+      line.style.width = (p * 100).toFixed(2) + '%';
+      ticking = false;
+    });
+  }
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  const links = $$('.topnav a');
+  const map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+  const io = new IntersectionObserver(es => {
+    es.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(a => a.classList.remove('on'));
+        const a = map.get(e.target.id);
+        if (a) a.classList.add('on');
+      }
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  ['origin', 'types', 'vessels', 'craft', 'taste', 'ritual', 'exam'].forEach(id => {
+    const el = document.getElementById(id); if (el) io.observe(el);
+  });
+
+  const rio = new IntersectionObserver(es => {
+    es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); } });
+  }, { threshold: .12 });
+  $$('.reveal').forEach(el => rio.observe(el));
+})();
+
+/* ---------- 一 · 源：时间轴 ---------- */
+(function timeline() {
+  const box = $('#tlItems'), panel = $('#tlPanel');
+  DATA.eras.forEach((e, i) => {
+    const b = document.createElement('button');
+    b.className = 'tl-item' + (i === 0 ? ' on' : '');
+    b.setAttribute('role', 'tab');
+    b.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+    b.innerHTML = `${e.svg}<span class="t"><b>${e.method}</b><span>${e.name} · ${e.years}</span></span>`;
+    b.addEventListener('click', () => {
+      $$('.tl-item', box).forEach(x => { x.classList.remove('on'); x.setAttribute('aria-selected', 'false'); });
+      b.classList.add('on'); b.setAttribute('aria-selected', 'true');
+      show(i);
+      beep(520, .05, 'sine', .03);
+    });
+    box.appendChild(b);
+  });
+  function show(i) {
+    const e = DATA.eras[i];
+    panel.innerHTML = `<div class="tl-fade"><h3>${e.name} · ${e.method}</h3><div class="era-date">${e.years}</div>
+      <p>${e.text}</p><ul class="tl-points">${e.points.map(p => `<li>${p}</li>`).join('')}</ul></div>`;
+  }
+  show(0);
+})();
+
+/* ---------- 二 · 类：发酵光谱 ---------- */
+(function spectrum() {
+  const axis = $('#axis'), tray = $('#tray'), grid = $('#axisGrid');
+  for (let i = 0; i <= 10; i++) {
+    const el = document.createElement('i');
+    el.style.left = i * 10 + '%';
+    if (i % 2 === 0) {
+      el.classList.add('major');
+      const s = document.createElement('span'); s.textContent = i * 10 + '%'; el.appendChild(s);
+    }
+    grid.appendChild(el);
+  }
+
+  const placedIds = new Set();
+  const order = shuffle(DATA.teas);
+
+  function cardEl(t) {
+    const b = document.createElement('button');
+    b.className = 'card';
+    b.type = 'button';
+    b.dataset.id = t.id;
+    b.innerHTML = `<span class="sw" style="background:${t.color}"></span>${t.name}`;
+    b.addEventListener('click', ev => {
+      if (b.dataset.dragged === '1') { b.dataset.dragged = '0'; return; }
+      if (b.classList.contains('locked')) { showTea(t); return; }
+      select(t, b, ev.detail === 0);
+    });
+    attachDrag(b, t);
+    return b;
+  }
+  order.forEach(t => tray.appendChild(cardEl(t)));
+
+  /* 点击 / 键盘放置：给不方便拖拽的人一条通路 */
+  let selected = null, cursorPct = 50;
+  const cursor = document.createElement('i');
+  cursor.className = 'spec-cursor';
+  cursor.hidden = true;
+  axis.appendChild(cursor);
+  axis.tabIndex = 0;
+  axis.setAttribute('role', 'application');
+  axis.setAttribute('aria-label', TX('发酵光谱：点选茶卡后拖到对应位置，或用左右方向键选位置、回车放置', 'Oxidation spectrum: select a tea card, drag it into place, or use the arrow keys and press Enter'));
+
+  function clearSel() {
+    if (selected) selected.el.classList.remove('sel');
+    selected = null;
+    cursor.hidden = true;
+  }
+  function select(t, el, keyboard) {
+    clearSel();
+    selected = { t, el };
+    el.classList.add('sel');
+    cursorPct = 50;
+    cursor.style.left = '50%';
+    cursor.hidden = false;
+    axis.focus({ preventScroll: true });
+    showTea(t);
+    toast(TX(`已选中「${t.name}」：拖拽放置，或按 ← → 选位置、回车确认`, `Selected “${t.name}” — drag it onto the spectrum, or use ← → and press Enter`));
+  }
+  function attempt(t, el, pct) {
+    const nearest = DATA.teas.reduce((best, x) => Math.abs(x.pos - pct) < Math.abs(best.pos - pct) ? x : best, DATA.teas[0]);
+    if (nearest.id === t.id && Math.abs(t.pos - pct) <= 10) { place(t, el); clearSel(); return true; }
+    err();
+    el.classList.add('wrong');
+    setTimeout(() => el.classList.remove('wrong'), 420);
+    const other = nearest.id === t.id ? null : nearest;
+    if (other) toast(TX(`这个位置更接近「${other.name}」，再想想发酵程度`, `That spot is closer to “${other.name}” — think about the degree of oxidation`));
+    else toast(TX('差一点，位置再靠' + (pct > t.pos ? '左' : '右') + '一些', `Close — nudge a little to the ${pct > t.pos ? 'left' : 'right'}`));
+    return false;
+  }
+  axis.addEventListener('click', e => {
+    if (!selected || e.target.closest('.card')) return;
+    const r = axis.getBoundingClientRect();
+    attempt(selected.t, selected.el, clamp((e.clientX - r.left) / r.width * 100, 0, 100));
+  });
+  axis.addEventListener('keydown', e => {
+    if (!selected) return;
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      cursorPct = clamp(cursorPct + (e.key === 'ArrowRight' ? 2 : -2), 0, 100);
+      cursor.style.left = cursorPct + '%';
+      beep(420, .02, 'sine', .012);
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      attempt(selected.t, selected.el, cursorPct);
+    } else if (e.key === 'Escape') {
+      clearSel();
+    }
+  });
+
+  function showTea(t) {
+    $('#teaDetail').innerHTML = `<h3><span class="sw" style="background:${t.color}"></span>${t.name}<span style="font-size:11px;letter-spacing:.14em;color:var(--ink-3);margin-left:8px">${TX(t.range + ' 发酵', t.range + ' oxidised')}</span></h3>
+      <p style="margin:10px 0 0;font-size:14px;color:var(--ink-2);line-height:1.9">${t.note}</p>
+      <div class="tea-meta">
+        <div><b>${TX('关键工艺', 'Key process')}</b>${t.craft}</div>
+        <div><b>${TX('外形', 'Leaf')}</b>${t.shape}</div>
+        <div><b>${TX('汤色', 'Liquor')}</b>${t.liquor}</div>
+        <div><b>${TX('香气', 'Aroma')}</b>${t.aroma}</div>
+        <div><b>${TX('滋味', 'Taste')}</b>${t.taste}</div>
+        <div><b>${TX('冲泡', 'Brewing')}</b>${t.brew}</div>
+        <div style="grid-column:1/-1"><b>${TX('代表茶', 'Representative teas')}</b>${t.reps.join(' · ')}</div>
+      </div>`;
+    beep(660, .04, 'sine', .025);
+  }
+
+  function attachDrag(el, t) {
+    let startX = 0, startY = 0, moved = false, ghost = null, pid = null;
+    el.addEventListener('pointerdown', e => {
+      if (el.classList.contains('locked')) return;
+      e.preventDefault();
+      pid = e.pointerId;
+      startX = e.clientX; startY = e.clientY; moved = false;
+      el.setPointerCapture(pid);
+      ghost = document.createElement('div');
+      ghost.className = 'drag-ghost';
+      ghost.innerHTML = `<span class="sw" style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${t.color};margin-right:7px"></span>${t.name}`;
+      ghost.style.left = e.clientX + 'px'; ghost.style.top = e.clientY + 'px';
+      document.body.appendChild(ghost);
+      el.classList.add('dragging');
+      el.dataset.dragged = '1';
+    });
+    el.addEventListener('pointermove', e => {
+      if (!ghost) return;
+      if (Math.abs(e.clientX - startX) > 5 || Math.abs(e.clientY - startY) > 5) moved = true;
+      ghost.style.left = e.clientX + 'px';
+      ghost.style.top = e.clientY + 'px';
+    });
+    function end(e) {
+      if (!ghost) return;
+      const g = ghost; ghost = null;
+      g.remove();
+      el.classList.remove('dragging');
+      if (!moved) { select(t, el); return; }
+      const r = axis.getBoundingClientRect();
+      const inside = e.clientX > r.left - 24 && e.clientX < r.right + 24 && e.clientY > r.top - 70 && e.clientY < r.bottom + 70;
+      if (!inside) { toast(TX('把卡片放到光谱上', 'Drop the card onto the spectrum')); return; }
+      attempt(t, el, clamp((e.clientX - r.left) / r.width * 100, 0, 100));
+    }
+    el.addEventListener('pointerup', end);
+    el.addEventListener('pointercancel', () => { if (ghost) { ghost.remove(); ghost = null; el.classList.remove('dragging'); } });
+  }
+
+  function layoutPlaced() {
+    const narrow = window.innerWidth <= 640;
+    const rows = ['26%', '50%', '74%'];
+    $$('#axis .card.placed').forEach(el => {
+      const t = DATA.teas.find(x => x.id === el.dataset.id);
+      if (!t) return;
+      el.style.left = (narrow ? clamp(t.pos, 10, 90) : clamp(t.pos, 4, 96)) + '%';
+      el.style.top = narrow ? rows[DATA.teas.indexOf(t) % 3] : '50%';
+    });
+  }
+  window.addEventListener('resize', layoutPlaced);
+
+  function place(t, el) {
+    placedIds.add(t.id);
+    el.classList.remove('dragging', 'sel');
+    el.classList.add('placed', 'locked');
+    el.dataset.pos = t.pos;
+    axis.appendChild(el);
+    layoutPlaced();
+    const ti = DATA.teas.indexOf(t);
+    let gained = 0;
+    t.reps.forEach((r, ri) => { if (unlock('t:' + ti + '-' + ri, { silent: true })) gained++; });
+    if (gained) toast(TX(`图鉴 +${gained} · ${t.name} 的三款代表茶`, `Codex +${gained} · three ${t.name} representatives`));
+    showTea(t);
+    const n = placedIds.size;
+    $('#specStat').textContent = TX(`已归位 ${n} / 6`, `Placed ${n} / 6`);
+    ok();
+    if (n === 6) { setTimeout(() => { buildCmp(); toast(TX('六类归位 · 光谱完成', 'All six placed · spectrum complete')); }, 320); }
+  }
+
+  function buildCmp() {
+    const box = $('#cmp');
+    if (!box.hidden) return;
+    const rows = [
+      [TX('发酵度', 'Oxidation'), t => t.range],
+      [TX('关键工艺', 'Key process'), t => t.craft],
+      [TX('代表茶', 'Representative teas'), t => t.reps.join(TX('、', ' · '))],
+      [TX('汤色', 'Liquor'), t => t.liquor],
+      [TX('香气', 'Aroma'), t => t.aroma],
+      [TX('冲泡', 'Brewing'), t => t.brew]
+    ];
+    let html = `<table><thead><tr><th>${TX('对照', 'Compare')}</th>${DATA.teas.map(t => `<th style="color:var(--ink)">${t.name}</th>`).join('')}</tr></thead><tbody>`;
+    rows.forEach(([k, f]) => { html += `<tr><td>${k}</td>${DATA.teas.map(t => `<td>${f(t)}</td>`).join('')}</tr>`; });
+    html += '</tbody></table>';
+    box.innerHTML = html;
+    box.hidden = false;
+  }
+})();
+
+/* ---------- 三 · 器：二十四器配对 ---------- */
+(function vessels() {
+  const PER = 6;
+  const totalRounds = Math.ceil(DATA.vessels.length / PER);
+  let round = 0, matched = 0, errors = 0, sel = null;
+
+  const namesBox = $('#vmNames'), usesBox = $('#vmUses'), msg = $('#vmMsg');
+
+  function say(text, bad) {
+    msg.textContent = text || '';
+    msg.classList.toggle('bad', !!bad);
+  }
+
+  function render() {
+    sel = null;
+    namesBox.innerHTML = '';
+    usesBox.innerHTML = '';
+    const slice = DATA.vessels.slice(round * PER, round * PER + PER);
+    $('#vmRound').textContent = round + 1;
+    shuffle(slice).forEach(v => {
+      const b = document.createElement('button');
+      b.className = 'chip'; b.type = 'button'; b.dataset.n = v.n;
+      b.innerHTML = `<span>${v.n}</span>`;
+      b.addEventListener('click', () => {
+        $$('.chip', namesBox).forEach(x => x.classList.remove('sel'));
+        b.classList.add('sel'); sel = v.n;
+        beep(560, .04, 'sine', .025);
+        say(TX('已选「' + v.n + '」，再点右侧对应的用途', 'Selected “' + v.n + '” — now pick its use on the right'));
+      });
+      namesBox.appendChild(b);
+    });
+    shuffle(slice).forEach(v => {
+      const b = document.createElement('button');
+      b.className = 'chip'; b.type = 'button'; b.dataset.n = v.n;
+      b.innerHTML = `<span>${v.s}</span>`;
+      b.addEventListener('click', () => pick(v, b));
+      usesBox.appendChild(b);
+    });
+    if (round === 0 && matched === 0) say(TX('先点左侧器物，再点右侧用途', 'Pick a vessel on the left, then its use on the right'));
+  }
+
+  function pick(v, btn) {
+    if (!sel) { say(TX('先在左边选一件器物', 'Choose a vessel on the left first'), true); err(); return; }
+    if (sel === v.n) {
+      $$('.chip', namesBox).forEach(x => { if (x.dataset.n === sel) { x.classList.add('done'); x.classList.remove('sel'); } });
+      btn.classList.add('done');
+      matched++;
+      $('#vmCount').textContent = matched;
+      unlock('v:' + DATA.vessels.indexOf(v), { silent: true });
+      ok();
+      say(TX('对了：' + v.n + ' —— ' + v.f, 'Right: ' + v.n + ' — ' + v.f));
+      sel = null;
+      if (matched % PER === 0 && matched < DATA.vessels.length) {
+        setTimeout(() => { round++; if (round >= totalRounds) round = totalRounds - 1; render(); say(TX('这一组完成了，继续下一组', 'Set complete — on to the next')); }, 950);
+      } else if (matched === DATA.vessels.length) {
+        say(TX('二十四器全部归位。你现在可以照着《茶经》煮一碗唐茶了。', 'All twenty-four are in place. You could now boil a bowl of Tang tea from the Classic of Tea.'));
+        toast(TX('二十四器 · 全部解锁', 'Twenty-four vessels · all unlocked'));
+      }
+    } else {
+      errors++; $('#vmErr').textContent = errors;
+      btn.classList.add('bad'); err();
+      setTimeout(() => btn.classList.remove('bad'), 420);
+      say(TX('不是这一件。' + v.s + '，想想它和火、水还是茶末有关？', 'Not this one. ' + v.s + ' — is it about fire, water, or the powder?'), true);
+    }
+  }
+  render();
+})();
+
+/* ---------- 六 · 礼：茶俗卡与茶诗 ---------- */
+(function rituals() {
+  const box = $('#rituals'), detail = $('#ritualDetail');
+  DATA.rituals.forEach((r, i) => {
+    const d = document.createElement('button');
+    d.className = 'ritual'; d.type = 'button';
+    d.innerHTML = `<div class="where">${r.where}</div><h3>${r.name}</h3><p>${r.intro}</p><div class="go">${TX('看步骤与一问 →', 'Steps and a question →')}</div>`;
+    d.addEventListener('click', () => open(r, d));
+    box.appendChild(d);
+  });
+  function open(r, btn) {
+    $$('.ritual', box).forEach(x => x.classList.remove('on'));
+    btn.classList.add('on');
+    unlock('r:' + r.id, { silent: true });
+    detail.classList.add('show');
+    requestAnimationFrame(() => {
+      const r = detail.getBoundingClientRect();
+      if (r.top > innerHeight - 90 || r.bottom < 90) detail.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+    detail.innerHTML = `<h3 style="margin:0 0 4px;font-size:22px;font-weight:500;letter-spacing:.12em">${r.name}</h3>
+      <div style="font-size:11px;letter-spacing:.16em;color:var(--ink-3);margin-bottom:14px">${r.where}</div>
+      <div class="steps">${r.steps.map(([k, v], i) => `<div class="step"><b>${TX('其' + '一二三四五六七八'[i], 'Step ' + (i + 1))}</b>${k}<br>${v}</div>`).join('')}</div>
+      <div class="ritual-quiz">
+        <p>${r.quiz.q}</p>
+        <div class="rq-opts">${r.quiz.o.map((o, i) => `<button type="button" data-i="${i}">${o}</button>`).join('')}</div>
+        <div class="rq-fb"></div>
+      </div>`;
+    $$('.rq-opts button', detail).forEach(b => {
+      b.addEventListener('click', () => {
+        const i = +b.dataset.i;
+        if (i === r.quiz.a) {
+          b.classList.add('ok'); ok();
+          detail.querySelector('.rq-fb').textContent = r.quiz.fb;
+          $$('.rq-opts button', detail).forEach(x => x.disabled = true);
+        } else {
+          b.classList.add('no'); err();
+          detail.querySelector('.rq-fb').textContent = TX('再想想——' + r.quiz.fb.split('；')[0] + '。', 'Not quite — ' + r.quiz.fb.split(';')[0] + '.');
+        }
+      });
+    });
+    beep(620, .04, 'sine', .03);
+  }
+})();
+
+(function poems() {
+  const text = $('#poemText'), note = $('#poemNote'), side = $('#poemSide');
+  DATA.poems.forEach((p, i) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = p.title;
+    b.addEventListener('click', () => show(i, b));
+    side.appendChild(b);
+  });
+  function show(i, btn, silentInit) {
+    const p = DATA.poems[i];
+    $$('button', side).forEach(x => x.classList.remove('on'));
+    if (btn) btn.classList.add('on');
+    text.innerHTML = p.lines.map(l => `<span>${l}</span>`).join('') + `<span class="author">${p.author}</span>`;
+    note.innerHTML = p.note;
+    text.parentElement.classList.remove('tl-fade');
+    void text.offsetWidth;
+    text.parentElement.classList.add('tl-fade');
+    if (!silentInit) unlock('p:' + i, { silent: true });
+    beep(700, .04, 'sine', .02);
+  }
+  show(0, side.querySelector('button'), true);
+})();
+
+/* ---------- 图鉴 ---------- */
+function renderCodex() {
+  const grid = $('#codexGrid');
+  grid.innerHTML = '';
+  ENTRIES.forEach(e => {
+    const unlocked = state.unlocked.has(e.key);
+    const d = document.createElement('div');
+    d.className = 'codex-item' + (unlocked ? '' : ' locked');
+    d.innerHTML = unlocked ? `${e.name}<small>${e.type}</small>` : `？<small>${e.type}</small>`;
+    if (unlocked) {
+      d.addEventListener('click', () => {
+        $('#codexDetail').innerHTML = `<b>${e.name}</b> · ${e.type}<br>${e.desc}`;
+        beep(760, .04, 'sine', .02);
+      });
+    }
+    grid.appendChild(d);
+  });
+  refreshCodexCount();
+}
+(function codexUI() {
+  const modal = $('#codexModal');
+  $('#codexBtn').addEventListener('click', () => { renderCodex(); modal.classList.add('show'); document.body.style.overflow = 'hidden'; });
+  $('#codexClose').addEventListener('click', close);
+  modal.addEventListener('click', e => { if (e.target === modal) close(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('show')) close(); });
+  function close() { modal.classList.remove('show'); document.body.style.overflow = ''; }
+})();
+
+/* ---------- 声音开关 ---------- */
+(function soundUI() {
+  const b = $('#soundBtn');
+  function paint() {
+    b.classList.toggle('off', !state.sound);
+    b.setAttribute('aria-pressed', state.sound ? 'true' : 'false');
+    $('.lbl', b).textContent = state.sound ? TX('声音 开', 'Sound on') : TX('声音 关', 'Sound off');
+  }
+  b.addEventListener('click', () => {
+    state.sound = !state.sound; persist(); paint();
+    if (state.sound) beep(880, .08);
+  });
+  paint();
+})();
+
+/* ---------- 引导 ---------- */
+(function guide() {
+  const g = $('#guide');
+  if (!state.guide) g.classList.add('show');
+  $('#guideStart').addEventListener('click', () => {
+    g.classList.remove('show'); state.guide = true; persist();
+    beep(660, .1);
+  });
+})();
+
+refreshCodexCount();
+</script>
+<script>
+/* =========================================================
+   GAMES —— 点茶击拂 / 斗茶 / 冲泡模拟 / 盲品 / 风味轮
+   ========================================================= */
+
+/* ---------- 四 · 其一：点茶击拂 ---------- */
+(function diancha() {
+  const cv = $('#whiskCanvas');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  let W = 0, H = 0, dpr = 1;
+
+  function size() {
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  size();
+  window.addEventListener('resize', size);
+
+  const S = {
+    down: false, lastA: null, lastT: 0, speed: 0, smooth: 0,
+    foam: 0, tang: 1, fine: 0, coarse: 0, spill: 0,
+    px: null, py: null, done: false, t0: 0
+  };
+  const BAND = [250, 550];
+  const bubbles = Array.from({ length: 260 }, () => {
+    const a = Math.random() * Math.PI * 2;
+    const r = Math.sqrt(Math.random()) * 0.84;
+    return { a, r, s: .7 + Math.random() * 2.1, o: .13 + Math.random() * .42 };
+  });
+
+  function reset() {
+    Object.assign(S, {
+      down: false, lastA: null, lastT: 0, speed: 0, smooth: 0,
+      foam: 0, tang: 1, fine: 0, coarse: 0, spill: 0,
+      px: null, py: null, done: false, t0: performance.now()
+    });
+    $('#whiskTxt').textContent = '1';
+    $('#foamBar').style.width = '0%';
+    $('#foamLbl').textContent = '0%';
+    $('#whiskResult').innerHTML = `<span style="color:var(--ink-3);font-size:13px">${TX('击拂七汤后，这里会给你一盏的评语。', 'After seven infusions, a verdict appears here.')}</span>`;
+  }
+
+  function point(e) {
+    const r = cv.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  }
+
+  cv.addEventListener('pointerdown', e => {
+    if (S.done) return;
+    e.preventDefault();
+    cv.setPointerCapture(e.pointerId);
+    const p = point(e);
+    S.down = true; S.px = p.x; S.py = p.y;
+    S.lastA = Math.atan2(p.y - H / 2, p.x - W / 2);
+    S.lastT = performance.now();
+  });
+  cv.addEventListener('pointermove', e => {
+    const p = point(e);
+    S.px = p.x; S.py = p.y;
+    if (!S.down || S.done) return;
+    const now = performance.now();
+    const a = Math.atan2(p.y - H / 2, p.x - W / 2);
+    let d = a - S.lastA;
+    while (d > Math.PI) d -= Math.PI * 2;
+    while (d < -Math.PI) d += Math.PI * 2;
+    const dt = Math.max(8, now - S.lastT);
+    const deg = Math.abs(d) * 180 / Math.PI / (dt / 1000);
+    S.smooth = S.smooth * .72 + Math.min(deg, 1400) * .28;
+    S.speed = S.smooth;
+    S.lastA = a; S.lastT = now;
+  });
+  function up() { S.down = false; S.lastA = null; }
+  cv.addEventListener('pointerup', up);
+  cv.addEventListener('pointercancel', up);
+  cv.addEventListener('pointerleave', () => { if (!S.down) { S.px = null; S.py = null; } });
+
+  $('#whiskReset').addEventListener('click', () => { reset(); beep(520, .06); });
+  reset();
+
+  function tick() {
+    const now = performance.now();
+    const cx = W / 2, cy = H / 2, R = Math.min(W, H) * 0.4;
+    if (S.down && !S.done) {
+      const dt = Math.min(.06, (now - (S.t0 || now)) / 1000);
+      S.t0 = now;
+      // 停手即掉速：只有持续画圈才能维持击拂速度
+      if (now - (S.lastT || 0) > 110) S.speed *= 0.86;
+      const dx = (S.px ?? cx) - cx, dy = (S.py ?? cy) - cy;
+      const dist = Math.hypot(dx, dy) / R;
+      const inBand = S.speed >= BAND[0] && S.speed <= BAND[1];
+      const inArea = dist > 0.12 && dist < 0.86;
+      if (inArea && inBand) { S.foam += dt * .78; S.fine += dt; }
+      else if (inArea) { S.foam += dt * .16; S.coarse += dt; }
+      else if (dist >= 0.86) { S.spill += dt; }
+      if (S.foam >= 1) {
+        S.foam = 0;
+        if (S.tang < 7) { S.tang++; beep(520 + S.tang * 30, .05, 'sine', .03); }
+        else finish();
+      }
+    } else {
+      S.speed *= .9;
+    }
+    paint(cx, cy, R);
+    const pct = S.tang >= 7 && S.done ? 1 : ((S.tang - 1) + S.foam) / 7;
+    $('#foamBar').style.width = (pct * 100).toFixed(0) + '%';
+    $('#foamLbl').textContent = Math.round(pct * 100) + '%';
+    $('#whiskTxt').textContent = S.tang;
+    const sp = clamp(S.speed / 900 * 100, 0, 100);
+    $('#speedMark').style.left = sp + '%';
+    $('#speedLbl').textContent = Math.round(S.speed);
+    requestAnimationFrame(tick);
+  }
+
+  function paint(cx, cy, R) {
+    ctx.clearRect(0, 0, W, H);
+    // 盏
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2);
+    ctx.fillStyle = '#2F2A25'; ctx.fill();
+    ctx.beginPath(); ctx.arc(cx, cy, R * .95, 0, Math.PI * 2);
+    ctx.fillStyle = '#4A3A2C'; ctx.fill();
+    ctx.beginPath(); ctx.arc(cx, cy, R * .89, 0, Math.PI * 2);
+    const g = ctx.createRadialGradient(cx - R * .3, cy - R * .3, R * .1, cx, cy, R * .9);
+    g.addColorStop(0, '#A9793F'); g.addColorStop(.7, '#7B5228'); g.addColorStop(1, '#5C3B1D');
+    ctx.fillStyle = g; ctx.fill();
+    // 汤花：先铺一层乳白的沫饽，再撒细泡
+    const progress = clamp(((S.tang - 1) + S.foam) / 7, 0, 1);
+    const quality = S.fine + S.coarse > 0 ? S.fine / (S.fine + S.coarse) : .6;
+    if (progress > 0.02) {
+      const fg = ctx.createRadialGradient(cx, cy, R * .05, cx, cy, R * .84);
+      fg.addColorStop(0, `rgba(253,250,242,${.14 + progress * .58})`);
+      fg.addColorStop(.72, `rgba(251,247,237,${.08 + progress * .44})`);
+      fg.addColorStop(1, 'rgba(250,246,236,0)');
+      ctx.beginPath(); ctx.arc(cx, cy, R * .87, 0, Math.PI * 2);
+      ctx.fillStyle = fg; ctx.fill();
+    }
+    const n = Math.floor(bubbles.length * (0.08 + progress * 0.92));
+    for (let i = 0; i < n; i++) {
+      const b = bubbles[i];
+      const rad = R * .8 * b.r;
+      const x = cx + Math.cos(b.a) * rad;
+      const y = cy + Math.sin(b.a) * rad;
+      const rr = b.s * (1.1 + (1 - quality) * 1.6);
+      ctx.beginPath(); ctx.arc(x, y, rr, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,252,244,${b.o * (0.55 + quality * 0.75)})`;
+      ctx.fill();
+    }
+    // 盏沿高光
+    ctx.beginPath(); ctx.arc(cx, cy, R - 1, Math.PI * 1.05, Math.PI * 1.55);
+    ctx.strokeStyle = 'rgba(255,255,255,.22)'; ctx.lineWidth = 2; ctx.stroke();
+    // 茶筅
+    if (S.px != null) {
+      const dx = S.px - cx, dy = S.py - cy;
+      const a = Math.atan2(dy, dx);
+      ctx.save();
+      ctx.translate(cx + Math.cos(a) * R * .5, cy + Math.sin(a) * R * .5);
+      ctx.rotate(a + Math.PI / 2);
+      for (let i = -6; i <= 6; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * 2.4, -R * .06);
+        ctx.quadraticCurveTo(i * 3.2, R * .06, i * 4.4, R * .16);
+        ctx.strokeStyle = 'rgba(232,214,180,.55)'; ctx.lineWidth = 1.2; ctx.stroke();
+      }
+      ctx.beginPath(); ctx.arc(0, -R * .07, 3.2, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(232,214,180,.8)'; ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  function finish() {
+    S.done = true; S.down = false;
+    const total = S.fine + S.coarse + S.spill;
+    const fineRatio = total > 0 ? S.fine / total : 0;
+    const score = Math.round(clamp(46 + fineRatio * 54 - Math.min(14, S.spill * 8), 20, 100));
+    let title, word;
+    if (score >= 90) { title = TX('一盏好茶', 'A fine bowl'); word = TX('汤花细密、紧贴盏壁，是"咬盏"的成色。宋人斗茶，这一盏可以拿出去比了。', 'Fine, dense foam that clings to the bowl — this is what “biting the bowl” means. A Song tea contest would take this bowl seriously.'); }
+    else if (score >= 75) { title = TX('沫饽已成', 'The foam has come'); word = TX('汤花起来了，但还差一点细。第七汤收得再轻些，沫饽会更白更匀。', 'The foam is up but not yet fine. Ease off on the seventh infusion and it will turn whiter and more even.'); }
+    else if (score >= 58) { title = TX('粗沫初泛', 'Coarse foam'); word = TX('速度不稳，汤花粗细不匀。击拂要"手轻筅重，指绕腕旋"，快慢有节奏才出细沫。', 'The speed is uneven, so the foam is coarse. Light hand, firm whisk, wrist circling — rhythm makes fine foam.'); }
+    else { title = TX('水痕易退', 'The line shows early'); word = TX('汤花撑不住，一停就散。多半是击拂太快或只在边缘打转，试着让筅头始终走在中圈。', 'The foam will not hold. You are probably whisking too fast or only round the rim; keep the whisk in the middle.'); }
+    $('#whiskResult').innerHTML = `<h4>${title}</h4><span class="score-big">${score}<small>${TX('分', 'pts')}</small></span>
+      <p style="margin:8px 0 0;font-size:13px;line-height:1.9">${word}</p>`;
+    ok();
+  }
+
+  requestAnimationFrame(tick);
+})();
+
+/* ---------- 四 · 其二：斗茶 ---------- */
+(function doucha() {
+  const bowlsBox = $('#dcBowls'), reveal = $('#dcReveal');
+  let round = 0, pw = 0, aw = 0, answered = false;
+
+  const liquor = name => ({
+    '鲜白': '#F7F0DF', '青白': '#E9ECDF', '灰白': '#DED9CC', '黄白': '#EBDCA8',
+    'Bright white': '#F7F0DF', 'Blue-white': '#E9ECDF', 'Grey-white': '#DED9CC', 'Gray-white': '#DED9CC', 'Yellow-white': '#EBDCA8'
+  })[name] || '#EDE2C6';
+
+  function paint() {
+    answered = false;
+    const d = DATA.doucha[round];
+    $('#dcRound').textContent = round + 1;
+    $('#dcScore').textContent = TX(`你 ${pw} : ${aw} 对手`, `You ${pw} : ${aw} Rival`);
+    const bowl = (k, b, label) => `<button class="bowl" type="button" data-k="${k}">
+      <div class="cup"><div class="liquid" style="background:${liquor(b.color)}"></div><div class="foam"></div></div>
+      <div class="name">${label}</div>
+      <dl><dt>${TX('汤色', 'Colour')}</dt><dd>${b.color}</dd><dt>${TX('汤花', 'Foam')}</dt><dd>${b.foam}</dd><dt>${TX('水痕', 'Line')}</dt><dd>${b.mark}</dd></dl>
+    </button>`;
+    bowlsBox.innerHTML = bowl('a', d.a, TX('茶盏 甲', 'Bowl A')) + bowl('b', d.b, TX('茶盏 乙', 'Bowl B'));
+    reveal.innerHTML = '';
+    $$('.bowl', bowlsBox).forEach(btn => btn.addEventListener('click', () => choose(btn.dataset.k)));
+  }
+
+  function choose(k) {
+    if (answered) return;
+    answered = true;
+    const d = DATA.doucha[round];
+    const win = k === d.win;
+    if (win) { pw++; ok(); } else { aw++; err(); }
+    $$('.bowl', bowlsBox).forEach(b => { b.classList.toggle('pick', b.dataset.k === k); b.disabled = true; });
+    $('#dcScore').textContent = TX(`你 ${pw} : ${aw} 对手`, `You ${pw} : ${aw} Rival`);
+    const side = k => TX(k === 'a' ? '甲' : '乙', k === 'a' ? 'A' : 'B');
+    reveal.innerHTML = `<div class="verdict"><b>${win ? TX('判对了', 'Called it') : TX('判错了', 'Called it wrong')}</b><span>${TX(`第 ${round + 1} 局，胜者是「${side(d.win)}」`, `Round ${round + 1} — Bowl ${side(d.win)} wins`)}</span></div>
+      <p style="margin:0 0 6px;font-size:13.5px;line-height:1.95">${d.why}</p>
+      <div class="dc-crit">
+        <div><b>${TX('汤色', 'Colour')}</b>${TX('甲', 'A')} ${d.a.color}<br>${TX('乙', 'B')} ${d.b.color}</div>
+        <div><b>${TX('汤花', 'Foam')}</b>${TX('甲', 'A')} ${d.a.foam}<br>${TX('乙', 'B')} ${d.b.foam}</div>
+        <div><b>${TX('水痕', 'Line')}</b>${TX('甲', 'A')} ${d.a.mark}<br>${TX('乙', 'B')} ${d.b.mark}</div>
+      </div>
+      <div style="margin-top:16px"><button class="btn ghost" id="dcNext">${round < 2 ? TX('下一局', 'Next round') : TX('看结果', 'See the result')}</button></div>`;
+    $('#dcNext').addEventListener('click', () => {
+      if (round < 2) { round++; paint(); }
+      else finish();
+    });
+  }
+
+  function finish() {
+    const d = pw > aw ? TX('你赢了', 'You win') : pw < aw ? TX('对手赢了', 'Rival wins') : TX('平手', 'A draw');
+    reveal.innerHTML = `<div class="verdict"><b>${d}</b><span>${TX(`三局：你 ${pw} : ${aw} 对手`, `Three rounds: you ${pw} : ${aw} rival`)}</span></div>
+      <p style="margin:0 0 10px;font-size:13.5px;line-height:1.95">${TX('斗茶比的是眼力：先看汤色是否鲜白，再看汤花能否咬盏，最后看水痕谁先退。三项里，水痕最不讲情面——它只认持久。', 'A contest is a test of the eye: first the colour, then whether the foam clings, and last whose water line shows first. Of the three, the line is the least forgiving — it only rewards endurance.')}</p>
+      <button class="btn ghost" id="dcAgain">${TX('再来三局', 'Three more rounds')}</button>`;
+    $('#dcAgain').addEventListener('click', () => { round = 0; pw = 0; aw = 0; paint(); });
+  }
+  paint();
+})();
+
+/* ---------- 四 · 其三：冲泡模拟 ---------- */
+(function brew() {
+  const R = {
+    green: { t: [80, 85], time: [20, 45], ratio: [45, 60], soft: true },
+    white: { t: [85, 90], time: [40, 90], ratio: [45, 60], soft: true },
+    yellow: { t: [80, 85], time: [30, 60], ratio: [45, 60], soft: true },
+    oolong: { t: [95, 100], time: [10, 30], ratio: [18, 25], soft: false },
+    red: { t: [90, 95], time: [20, 45], ratio: [45, 60], soft: false },
+    dark: { t: [100, 100], time: [30, 70], ratio: [20, 30], soft: false }
+  };
+  let idx = 0;
+  const picker = $('#brewPicker');
+  DATA.teas.forEach((t, i) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = t.name.replace('（乌龙）', '');
+    b.addEventListener('click', () => { idx = i; paintPicker(); update(); beep(600, .04, 'sine', .025); });
+    picker.appendChild(b);
+  });
+  function paintPicker() {
+    $$('button', picker).forEach((b, i) => b.classList.toggle('on', i === idx));
+  }
+  const tempEl = $('#brewTemp'), timeEl = $('#brewTime'), ratioEl = $('#brewRatio');
+
+  function update() {
+    const t = DATA.teas[idx], r = R[t.id];
+    const temp = +tempEl.value, time = +timeEl.value, ratio = +ratioEl.value;
+    $('#brewTempV').textContent = temp + '℃';
+    $('#brewTimeV').textContent = time + 's';
+    $('#brewRatioV').textContent = '1:' + ratio;
+    $('#brewLiquid').setAttribute('fill', t.liquorColor);
+    $('#brewLiquid').setAttribute('opacity', clamp(.55 + (60 - ratio) / 90, .5, .92));
+
+    let pen = 0, notes = [];
+    if (temp < r.t[0]) { pen += (r.t[0] - temp) * 1.1; notes.push(TX('温度偏低，香气出不来', 'Too cool — the aroma stays locked in')); }
+    if (temp > r.t[1]) { pen += (temp - r.t[1]) * (r.soft ? 2.4 : 1.5); notes.push(r.soft ? TX('嫩芽被烫熟，鲜爽尽失', 'Tender buds scalded — the freshness is gone') : TX('温度过高，苦涩被逼出来', 'Too hot — bitterness is driven out')); }
+    if (time < r.time[0]) { pen += (r.time[0] - time) / r.time[0] * 34; notes.push(TX('出汤太快，滋味没出来', 'Poured too soon — the flavour never opened')); }
+    if (time > r.time[1]) { pen += Math.min(38, (time - r.time[1]) / r.time[1] * 46); notes.push(TX('泡久了，涩感与闷味压过香气', 'Steeped too long — astringency and a dull note bury the aroma')); }
+    if (ratio > r.ratio[1]) { pen += Math.min(30, (ratio - r.ratio[1]) / r.ratio[1] * 34); notes.push(TX('水太多，汤感薄，有水味', 'Too much water — thin body, a watery taste')); }
+    if (ratio < r.ratio[0]) { pen += Math.min(30, (r.ratio[0] - ratio) / r.ratio[0] * 38); notes.push(TX('投茶过量，苦底重', 'Too much leaf — a heavy bitter base')); }
+
+    const score = Math.round(clamp(100 - pen, 5, 100));
+    $('#brewScore').textContent = score;
+
+    let flavor;
+    if (score >= 90) flavor = LANG === 'en'
+      ? `<b>${t.name}</b> holds its aroma (${t.aroma}), the body is ${t.id === 'white' ? 'light' : 'full'}, and the finish is clean. This is the cup it is meant to be.`
+      : `<b>${t.name}</b> 的香气（${t.aroma}）站得很稳，汤感${t.taste.includes('薄') ? '清爽' : '饱满'}，回甘收得干净。这一杯，是它该有的样子。`;
+    else if (score >= 72) flavor = LANG === 'en'
+      ? `Roughly right: ${t.aroma} is still there, but ${notes[0] || 'a detail'} muddies the layers.`
+      : `大致对路：${t.aroma}还在，但${notes[0] || '细节'}让层次糊了一点。`;
+    else flavor = LANG === 'en'
+      ? `This no longer tastes much like <b>${t.name}</b>: ${notes.slice(0, 2).join('; ')}.`
+      : `这一杯已经不太像 <b>${t.name}</b> 了：${notes.slice(0, 2).join('；')}。`;
+
+    $('#brewFlavor').innerHTML = flavor;
+    const range = r.t[0] === r.t[1] ? r.t[0] : r.t[0] + '–' + r.t[1];
+    $('#brewTip').textContent = score >= 90
+      ? TX('可以端给客人了。', 'Ready to serve.')
+      : TX(`建议：${range}℃、${r.time[0]}–${r.time[1]} 秒、茶水比 1:${r.ratio[0]}–${r.ratio[1]}。`, `Try ${range} °C, ${r.time[0]}–${r.time[1]} s, and a leaf-to-water ratio of 1:${r.ratio[0]}–${r.ratio[1]}.`);
+  }
+
+  [tempEl, timeEl, ratioEl].forEach(el => el.addEventListener('input', () => { update(); beep(420, .02, 'sine', .012); }));
+  paintPicker();
+  update();
+})();
+
+/* ---------- 五 · 盲品 ---------- */
+(function blind() {
+  let i = 0, score = 0, streak = 0, answered = false;
+  const clues = $('#blindClues'), opts = $('#blindOpts'), fb = $('#blindFb');
+  const nextBtn = $('#blindNext');
+
+  function paint() {
+    answered = false;
+    const item = DATA.blind[i];
+    $('#blindIdx').textContent = i + 1;
+    $('#blindStreak').textContent = streak;
+    $('#blindScore').textContent = score;
+    const tags = LANG === 'en' ? ['Leaf', 'Liquor', 'Aroma'] : ['形', '色', '香'];
+    clues.innerHTML = item.clues.map((c, k) => `<div class="clue" style="animation-delay:${k * .07}s"><i>${tags[k]}</i><span>${c}</span></div>`).join('');
+    const pool = DATA.teas.map(t => t.name).filter(n => n !== item.a);
+    const choices = shuffle([item.a, ...shuffle(pool).slice(0, 3)]);
+    opts.innerHTML = choices.map((c, k) => `<button class="opt" type="button" data-c="${c}"><span class="k">${'ABCD'[k]}</span>${c}</button>`).join('');
+    fb.innerHTML = TX('三条线索指向同一类茶。', 'Three clues, one family.');
+    nextBtn.hidden = true;
+    $$('.opt', opts).forEach(b => b.addEventListener('click', () => choose(b, item)));
+  }
+
+  function choose(btn, item) {
+    if (answered) return;
+    answered = true;
+    const right = btn.dataset.c === item.a;
+    $$('.opt', opts).forEach(b => {
+      b.disabled = true;
+      if (b.dataset.c === item.a) b.classList.add('right');
+      else if (b === btn) b.classList.add('wrong');
+    });
+    if (right) { score++; streak++; ok(); } else { streak = 0; err(); }
+    $('#blindScore').textContent = score;
+    $('#blindStreak').textContent = streak;
+    fb.innerHTML = `<b style="color:var(--ink)">${right ? TX('认出来了', 'Got it') : TX('答案是：', 'It was: ') + item.a}</b><br>${item.e}`;
+    nextBtn.hidden = false;
+    nextBtn.textContent = i < DATA.blind.length - 1 ? TX('下一题', 'Next') : TX('看结果', 'See the result');
+  }
+
+  nextBtn.addEventListener('click', () => {
+    if (i < DATA.blind.length - 1) { i++; paint(); }
+    else {
+      const level = score >= 7 ? TX('可以靠鼻子吃饭了', 'You could work by nose') : score >= 5 ? TX('基本功扎实', 'A solid foundation') : score >= 3 ? TX('能认出大类', 'You know the families') : TX('再多喝几杯', 'More cups needed');
+      fb.innerHTML = `<b style="color:var(--ink)">${TX(`八题答对 ${score} 题 · ${level}`, `${score} of 8 correct · ${level}`)}</b><br>${TX('盲品靠的是三条线索交叉验证：外形看工艺，汤色看发酵，香气看品种与焙火。', 'Blind tasting crosses three clues: leaf shape reads the process, liquor colour reads oxidation, aroma reads cultivar and roast.')}`;
+      nextBtn.hidden = true;
+    }
+  });
+
+  $('#blindReset').addEventListener('click', () => { i = 0; score = 0; streak = 0; paint(); });
+  paint();
+})();
+
+/* ---------- 五 · 风味轮 ---------- */
+(function wheel() {
+  const box = $('#wheel'), info = $('#wheelInfo');
+  const n = DATA.flavors.length;
+  DATA.flavors.forEach((f, i) => {
+    const a = i / n * Math.PI * 2 - Math.PI / 2;
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = f.n;
+    b.style.left = (50 + Math.cos(a) * 38) + '%';
+    b.style.top = (50 + Math.sin(a) * 38) + '%';
+    b.addEventListener('click', () => {
+      $$('button', box).forEach(x => x.classList.remove('on'));
+      b.classList.add('on');
+      info.innerHTML = `<b>${f.n}</b>${f.d}`;
+      beep(700, .04, 'sine', .02);
+    });
+    box.appendChild(b);
+  });
+})();
+</script>
+<script>
+/* =========================================================
+   EXAM —— 茶博士考：四十题 / 四层 / 五级 / 错题本
+   ========================================================= */
+(function exam() {
+  const body = $('#examBody');
+  const LEVEL = LANG === 'en' ? ['Recall', 'Identify', 'Scenario', 'Inference'] : ['识记', '辨认', '情境', '推理'];
+  const TAG = { '茶史': TX('茶史', 'History'), '茶类': TX('茶类', 'Tea types'), '工艺': TX('工艺', 'Craft'), '茶器': TX('茶器', 'Vessels'), '冲泡': TX('冲泡', 'Brewing'), '民俗': TX('民俗', 'Customs'), '茶诗': TX('茶诗', 'Poetry') };
+  let mode = 'exam', queue = [], qi = 0, correct = 0, answered = false;
+
+  function titleFor(n) {
+    let t = DATA.titles[0];
+    DATA.titles.forEach(x => { if (n >= x.min) t = x; });
+    return t;
+  }
+  function paintRank(n) {
+    $('#examRank').textContent = titleFor(n).name;
+  }
+  paintRank(state.best);
+
+  function start(list, m) {
+    mode = m;
+    queue = list;
+    qi = 0; correct = 0;
+    render();
+  }
+
+  function startExam() {
+    const order = shuffle(DATA.quiz.map((_, i) => i));
+    start(order, 'exam');
+  }
+  function startReview() {
+    if (!state.wrong.length) { toast(TX('错题本是空的', 'Your review list is empty')); return; }
+    start(state.wrong.slice(), 'review');
+  }
+
+  function render() {
+    if (qi >= queue.length) return result();
+    answered = false;
+    const idx = queue[qi];
+    const q = DATA.quiz[idx];
+    const opts = shuffle(q.o.map((text, i) => ({ text, ok: i === q.a })));
+    body.innerHTML = `
+      <div class="q-head">
+        <span>${TX(`第 ${qi + 1} / ${queue.length} 题${mode === 'review' ? ' · 错题重做' : ''}`, `Question ${qi + 1} / ${queue.length}${mode === 'review' ? ' · review' : ''}`)}</span>
+        <span class="q-level">${LEVEL[q.l - 1]}</span>
+      </div>
+      <p class="q-stem">${q.q}</p>
+      <div class="q-opts">${opts.map((o, i) => `<button class="q-opt" type="button" data-i="${i}"><span class="k">${'ABCD'[i]}</span><span>${o.text}</span></button>`).join('')}</div>
+      <div id="qFb"></div>
+      <div class="q-foot">
+        <span style="font-size:12px;color:var(--ink-3);letter-spacing:.08em">${TX(`答对 ${correct} 题`, `${correct} correct`)}</span>
+        <button class="btn ghost" id="qNext" hidden>${qi < queue.length - 1 ? TX('下一题', 'Next') : TX('看成绩', 'See the result')}</button>
+      </div>`;
+    $$('.q-opt', body).forEach((b, i) => b.addEventListener('click', () => choose(b, i, opts, q, idx)));
+    $('#examStat').textContent = TX(`答题 ${qi + 1} / ${queue.length} · 正确 ${correct}`, `Question ${qi + 1} / ${queue.length} · ${correct} correct`);
+  }
+
+  function choose(btn, i, opts, q, idx) {
+    if (answered) return;
+    answered = true;
+    const right = opts[i].ok;
+    $$('.q-opt', body).forEach((b, k) => {
+      b.disabled = true;
+      if (opts[k].ok) b.classList.add('right');
+      else if (k === i) b.classList.add('wrong');
+    });
+    if (right) {
+      correct++;
+      ok();
+      if (mode === 'review') {
+        const p = state.wrong.indexOf(idx);
+        if (p > -1) state.wrong.splice(p, 1);
+        persist();
+      }
+    } else {
+      err();
+      if (!state.wrong.includes(idx)) { state.wrong.push(idx); persist(); }
+    }
+    const fb = $('#qFb');
+    fb.className = 'q-fb' + (right ? '' : ' bad');
+    fb.innerHTML = `<b>${right ? TX('答对了', 'Correct') : TX('正确答案：', 'Answer: ') + q.o[q.a]}</b><br>${q.e}`;
+    $('#qNext').hidden = false;
+    $('#qNext').addEventListener('click', () => { qi++; render(); });
+    $('#examStat').textContent = TX(`答题 ${qi + 1} / ${queue.length} · 正确 ${correct}`, `Question ${qi + 1} / ${queue.length} · ${correct} correct`);
+    $('#qNext').focus({ preventScroll: true });
+  }
+
+  function result() {
+    const total = queue.length;
+    const pct = total ? Math.round(correct / total * 100) : 0;
+    if (mode === 'exam' && correct > state.best) { state.best = correct; persist(); }
+    paintRank(state.best);
+
+    const wrongTags = {};
+    queue.forEach(i => {
+      if (state.wrong.includes(i)) {
+        const t = DATA.quiz[i].t;
+        wrongTags[t] = (wrongTags[t] || 0) + 1;
+      }
+    });
+    const weak = Object.entries(wrongTags).sort((a, b) => b[1] - a[1]).slice(0, 3);
+
+    const title = titleFor(correct);
+    const words = pct >= 90 ? TX('这一场考得漂亮。你不但记得住，还辨得清。', 'A fine paper. You remember the facts and can tell them apart.')
+      : pct >= 75 ? TX('底子扎实。差的那几题，多半在情境与推理上。', 'A solid foundation. The misses are probably in the scenario and inference questions.')
+        : pct >= 50 ? TX('常识已经成形。把错题重做一遍，进步会很快。', 'The basics are forming. Work through the review list once and you will improve quickly.')
+          : TX('别急。先把“源”与“类”两章重看一遍，再回来考。', 'No rush. Read the Origin and Types chapters again, then come back.');
+
+    const wrongHTML = state.wrong.length
+      ? `<div class="wrong-list"><p style="font-size:13px;color:var(--ink-3);letter-spacing:.1em;margin:0 0 6px">${TX(`错题本 · ${state.wrong.length} 题`, `Review list · ${state.wrong.length}`)}</p>
+        ${state.wrong.map(i => `<details><summary>${DATA.quiz[i].q}</summary><p>${TX('答案：', 'Answer: ')}<b>${DATA.quiz[i].o[DATA.quiz[i].a]}</b><br>${DATA.quiz[i].e}</p></details>`).join('')}</div>`
+      : '';
+
+    body.innerHTML = `<div class="exam-result">
+      <span class="score-big">${pct}<small>%</small></span>
+      <h3>${title.name}</h3>
+      <p>${TX(`答对 ${correct} / ${total} 题 · ${words}`, `${correct} of ${total} correct · ${words}`)}</p>
+      ${weak.length ? `<p>${weak.map(([t, n]) => `<span class="weak">${TAG[t] || t} · ${TX('错 ' + n, n + ' missed')}</span>`).join('')}</p>` : ''}
+      <p style="font-size:12.5px;color:var(--ink-3)">${TX('错题会自动记入错题本，重做正确后移除。', 'Misses are added to your review list and removed once you get them right.')}</p>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap">
+        <button class="btn primary" id="examAgain">${TX('再考一次', 'Take it again')}</button>
+        <button class="btn ghost" id="examReview2">${TX(`练错题（${state.wrong.length}）`, `Review (${state.wrong.length})`)}</button>
+      </div>
+      ${wrongHTML}
+    </div>`;
+    $('#examAgain').addEventListener('click', startExam);
+    $('#examReview2').addEventListener('click', startReview);
+    $('#examStat').textContent = TX(`成绩 ${pct}% · 错题 ${state.wrong.length}`, `Score ${pct}% · ${state.wrong.length} to review`);
+  }
+
+  function intro() {
+    body.innerHTML = `<div class="exam-intro">
+      <h3>${TX('四十题，五个称号', 'Forty questions, five ranks')}</h3>
+      <p>${TX('题目分四层：识记、辨认、情境、推理。答错的题会进错题本，<br>重做正确后自动移除。没有时间限制，但请别查资料。', 'Four levels: recall, identify, scenario, inference. Misses go to your review list<br>and leave it once you get them right. No time limit — but please do not look things up.')}</p>
+      <div class="ranks">${DATA.titles.map(t => `<div>${t.name}<br><span style="font-size:10px">${TX(t.min + ' 题', t.min + ' right')}</span></div>`).join('')}</div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="btn primary" id="examStart">${TX('开考', 'Start')}</button>
+        <button class="btn ghost" id="examReview">${TX(`只练错题（${state.wrong.length}）`, `Review only (${state.wrong.length})`)}</button>
+      </div>
+      <p style="margin-top:18px;font-size:12px;color:var(--ink-3);letter-spacing:.06em">${TX(`当前最高：${state.best} 题 · 称号 ${titleFor(state.best).name}`, `Best so far: ${state.best} · ${titleFor(state.best).name}`)}</p>
+    </div>`;
+    correct = 0;
+    $('#examStat').textContent = TX(`共 ${DATA.quiz.length} 题 · 四层难度`, `${DATA.quiz.length} questions · four levels`);
+    $('#examStart').addEventListener('click', startExam);
+    $('#examReview').addEventListener('click', startReview);
+  }
+
+  intro();
+})();
+</script>
+</body>
+</html>
