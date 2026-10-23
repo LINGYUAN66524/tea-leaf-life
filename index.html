@@ -492,13 +492,6 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
 .codex-item small{display:block;font-size:10px;color:var(--ink-3);letter-spacing:.1em;margin-top:2px}
 .codex-detail{margin-top:16px;border-top:1px solid var(--line);padding-top:14px;font-size:13.5px;color:var(--ink-2);min-height:60px;line-height:1.9}
 .codex-detail b{color:var(--ink);letter-spacing:.1em}
-.guide{position:fixed;inset:0;z-index:90;display:none;background:rgba(245,240,230,.96);padding:24px;place-items:center}
-.guide.show{display:grid}
-.guide-card{max-width:520px;text-align:center}
-.guide-card h2{font-size:24px;font-weight:500;letter-spacing:.2em;margin:0 0 10px}
-.guide-steps{display:grid;gap:14px;margin:26px 0;text-align:left}
-.guide-steps div{display:flex;gap:14px;align-items:flex-start;font-size:14px;color:var(--ink-2)}
-.guide-steps b{font-weight:500;color:var(--cinnabar);font-size:18px;line-height:1.4}
 .toast{
   position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);z-index:95;
   background:var(--ink);color:var(--paper);font-size:13px;letter-spacing:.1em;
@@ -810,19 +803,6 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
     <div class="modal-head"><h2 id="codexTitle">茶事图鉴</h2><span id="codexSub">0 / 53</span><button class="modal-close" id="codexClose" aria-label="关闭">×</button></div>
     <div class="codex-grid" id="codexGrid"></div>
     <div class="codex-detail" id="codexDetail">已解锁的条目可以点开，看看它到底是什么。</div>
-  </div>
-</div>
-
-<div class="guide" id="guide">
-  <div class="guide-card">
-    <h2>先看三件事</h2>
-    <p style="color:var(--ink-2);font-size:13px;margin:0">这个页面不需要你读，需要你动手。</p>
-    <div class="guide-steps">
-      <div><b>一</b><span><strong>拖</strong>：把六张茶卡拖到发酵光谱上，放对了会定住。</span></div>
-      <div><b>二</b><span><strong>划</strong>：在盏里按住画圈，击拂出汤花，七汤为一盏。</span></div>
-      <div><b>三</b><span><strong>答</strong>：盲品、斗茶、四十道茶博士考，答错会记进错题本。</span></div>
-    </div>
-    <button class="btn primary" id="guideStart">开始</button>
   </div>
 </div>
 
@@ -1523,20 +1503,19 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
 
 /* ---------- 存储 ---------- */
 const KEY = 'tea_leaf_life_v1';
-const state = { unlocked: new Set(), wrong: [], best: 0, sound: false, guide: false };
+const state = { unlocked: new Set(), wrong: [], best: 0, sound: false };
 try {
   const s = JSON.parse(localStorage.getItem(KEY) || '{}');
   state.unlocked = new Set(s.unlocked || []);
   state.wrong = s.wrong || [];
   state.best = s.best || 0;
   state.sound = !!s.sound;
-  state.guide = !!s.guide;
 } catch (e) { /* 隐私模式下静默降级 */ }
 function persist() {
   try {
     localStorage.setItem(KEY, JSON.stringify({
       unlocked: [...state.unlocked], wrong: state.wrong,
-      best: state.best, sound: state.sound, guide: state.guide
+      best: state.best, sound: state.sound
     }));
   } catch (e) {}
 }
@@ -1748,18 +1727,11 @@ function err() { beep(196, .16, 'triangle', .05); }
   if (foot[0]) foot[0].textContent = 'A cultural essay, not medical advice. Sources: The Classic of Tea, Record of Tea, Treatise on Tea, and standard tea-science texts.';
   if (foot[1]) foot[1].textContent = 'A Leaf’s Life · an interactive scroll · runs offline, with no external requests';
 
-  /* 图鉴与引导 */
+  /* 图鉴 */
   setText('#codexTitle', 'The Tea Codex');
   setText('#codexClose', '×');
   $('#codexClose').setAttribute('aria-label', 'Close');
   setText('#codexDetail', 'Unlocked entries can be opened to see what they are.');
-  setText('#guide h2', 'Three things first');
-  setText('#guide .guide-card > p', 'This page is not for reading. It is for doing.');
-  const steps = $$('.guide-steps div');
-  if (steps[0]) steps[0].innerHTML = '<b>1</b><span><strong>Drag</strong>: put the six tea cards on the oxidation spectrum; correct ones lock in place.</span>';
-  if (steps[1]) steps[1].innerHTML = '<b>2</b><span><strong>Circle</strong>: hold and circle in the bowl to whisk up foam — seven infusions to a bowl.</span>';
-  if (steps[2]) steps[2].innerHTML = '<b>3</b><span><strong>Answer</strong>: blind tastings, tea contests, forty exam questions; mistakes go to your review list.</span>';
-  setText('#guideStart', 'Start');
   $$('[data-en]').forEach(el => { if (el.dataset.en != null) el.innerHTML = el.dataset.en; });
   $$('[data-alt-en]').forEach(el => { el.alt = el.dataset.altEn; });
 })();
@@ -2257,16 +2229,6 @@ function renderCodex() {
     if (state.sound) beep(880, .08);
   });
   paint();
-})();
-
-/* ---------- 引导 ---------- */
-(function guide() {
-  const g = $('#guide');
-  if (!state.guide) g.classList.add('show');
-  $('#guideStart').addEventListener('click', () => {
-    g.classList.remove('show'); state.guide = true; persist();
-    beep(660, .1);
-  });
 })();
 
 refreshCodexCount();
