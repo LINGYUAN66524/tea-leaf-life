@@ -1,15 +1,32 @@
-# 把网站变成公开网站
+# 部署与更新
 
-## 现状
+## 已上线
 
-`index.html` 是**本地文件**，双击能打开，但没有公网地址，所以目前**不是公开网站**。
-它已经具备公开部署的条件：纯静态、无构建、无外部请求，放到任何静态主机的根目录就能用。
+**https://lingyuan66524.github.io/tea-leaf-life/**
 
-同目录的 `tea-site.zip`（或 `茶文化互动站.zip`，同一个包）就是部署包，里面是 `index.html` + `assets/` + `.nojekyll`，下面任选一种方式上传。
+- 仓库：<https://github.com/LINGYUAN66524/tea-leaf-life>
+- 托管：GitHub Pages（public 仓库，`main` 分支根目录）
+- 更新：改完 `index.html` 或 `assets/` 后
+
+```bash
+git add .
+git commit -m "update"
+git push
+```
+
+Pages 通常 30 秒内自动重建，刷新页面即可。
 
 ---
 
-## 方案 A · Netlify Drop（最快，约 1 分钟）
+## 本地文件
+
+`index.html` 双击能打开；同目录的 `tea-site.zip`（或 `茶文化互动站.zip`）是完整部署包（`index.html` + `assets/` + `.nojekyll`）。
+
+以下方案作为备份/备选。
+
+---
+
+## 方案 A · Netlify Drop
 
 1. 打开 <https://app.netlify.com/drop>
 2. 把 `tea-site.zip` 整个拖进页面（**不要只拖 `index.html`**，图片在 `assets/` 里，必须一起上传）
